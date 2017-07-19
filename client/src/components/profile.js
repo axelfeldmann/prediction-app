@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Actions from '../actions/actions';
 import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 
 const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(Actions.logout()),
@@ -16,4 +17,4 @@ const Profile = ({ logout, toHomepage }) => (
   </div>
 );
 
-export default connect(null, mapDispatchToProps)(Profile);
+export default withRouter(connect(null, mapDispatchToProps)(Profile));

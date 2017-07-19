@@ -3,14 +3,18 @@ import { connect } from 'react-redux';
 import Actions from '../actions/actions';
 
 const mapDispatchToProps = (dispatch) => ({
-  login: () => dispatch(Actions.login())
+  login: (to) => () => dispatch(Actions.login(to))
 });
 
-const Login = ({ login }) => (
-  <div>
-    <h1> login </h1>
-    <button onClick={ login }> login </button>
-  </div>
-);
+const Login = ({ login, location }) => {
+  const dest = (location && location.state) ? (location.state.from.pathname) : '/profile';
+  console.log(dest);
+  return (
+    <div>
+      <h1> login </h1>
+      <button onClick={ login(dest) }> login </button>
+    </div>
+  );
+};
 
 export default connect(null, mapDispatchToProps)(Login);

@@ -1,16 +1,15 @@
 import { push } from 'react-router-redux';
 
-const login = (dest) => (dispatch, getState) => {
+const login = (to) => (dispatch, getState) => {
   setTimeout(() => {
     dispatch({ type: 'LOGIN' });
-    const to = (dest ? dest : '/profile');
     dispatch(push(to));
   }, 200);
 }
 
 const logout = () => (dispatch, getState) => {
   setTimeout(() => {
-    dispatch({ type: 'LOGIN' });
+    dispatch({ type: 'LOGOUT' });
     dispatch(push('/'));
   }, 200);
 } 

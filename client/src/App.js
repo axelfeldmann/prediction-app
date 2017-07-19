@@ -7,6 +7,8 @@ import { Route } from 'react-router';
 import Homepage from './components/homepage';
 import Login from './components/login';
 import Profile from './components/profile';
+import Test from './components/test';
+import PrivateRoute from './components/private-route';
 
 const App = () => (
   <Provider store={store}>
@@ -14,7 +16,8 @@ const App = () => (
       <div>
         <Route exact path="/" component={Homepage}/>
         <Route path="/login" component={Login}/>
-        <Route path="/profile" component={Profile}/>
+        <PrivateRoute path="/profile" component={Profile}/>
+        <PrivateRoute path="/test" component={Test}/>
       </div>
     </ConnectedRouter>
   </Provider>
