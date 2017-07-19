@@ -8,10 +8,23 @@ export const history = createHistory();
 const middleware = routerMiddleware(history);
 
 //my own reducers and stuff
-const defaultAuth = {};
+const defaultAuth = { auth: false };
 
+//placeholder auth reducer
 const authReducer = (state = defaultAuth, action) => {
-  return state;
+  let copy;
+  switch(action.type){
+    case 'LOGIN':
+      copy = Object.assign({}, state);
+      copy.auth = true;
+      return copy; 
+    case 'LOGOUT':
+      copy = Object.assign({}, state);
+      copy.auth = false;
+      return copy;
+    default:
+      return state;
+  }
 };
 
 export const store = createStore(

@@ -1,5 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import Actions from '../actions/actions';
 
-const Login = () => (<h1> login </h1>);
+const mapDispatchToProps = (dispatch) => ({
+  login: () => dispatch(Actions.login())
+});
 
-export default Login;
+const Login = ({ login }) => (
+  <div>
+    <h1> login </h1>
+    <button onClick={ login }> login </button>
+  </div>
+);
+
+export default connect(null, mapDispatchToProps)(Login);
