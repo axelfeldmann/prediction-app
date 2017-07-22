@@ -25,5 +25,3 @@ MongoClient.connect(dburl, (err, database) => {
     console.log('server running on ' + port);
   });
 });
- 
-
