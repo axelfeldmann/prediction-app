@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "the server for my predictions app",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axelfeldmann/prediction-app.git"
+  },
+  "author": "axel feldmann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/axelfeldmann/prediction-app/issues"
+  },
+  "homepage": "https://github.com/axelfeldmann/prediction-app#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1"
+  }
+}
