@@ -1,8 +1,12 @@
-import http from 'http';
+import express from 'express';
 
-http.createServer((req, res) => {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello bye\n');
-}).listen(1337, '127.0.0.1');
+var app = express();
+const port = 3001;
+ 
+app.get('/api', (req, res) => {
+  res.json({ text: 'Hello World' });
+});
+ 
+app.listen(port);
 
-console.log('Server running at http://127.0.0.1:1337/');
+console.log('server running on ' + port);
