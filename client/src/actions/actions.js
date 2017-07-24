@@ -4,7 +4,7 @@ const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 
 const login = (to, { username, password }) => (dispatch, getState) => {
-  fetch('/login', {
+  fetch('/auth/login', {
     method: 'POST',
     body: JSON.stringify({ username, password }),
     headers
@@ -14,10 +14,9 @@ const login = (to, { username, password }) => (dispatch, getState) => {
 }
 
 const register = (username, password) => (dispatch, getState) => {
-  console.log('register');
   const headers = new Headers();
   headers.append('Content-Type', 'application/json')
-  fetch('/register', {
+  fetch('/auth/signup', {
     method: 'POST',
     body: JSON.stringify({ username, password }),
     headers

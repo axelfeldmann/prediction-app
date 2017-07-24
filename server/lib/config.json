@@ -1,0 +1,4 @@
+{
+	"secret": "spicymeatball",
+  "dburl": "mongodb://axel:king@ds045785.mlab.com:45785/predictions-app"
+}
