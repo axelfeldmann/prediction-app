@@ -8,8 +8,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const apiTest = () => {
-  fetch('/api')
-  .then(resp => resp.json())
+  fetch('/api2')
+  .then(resp => resp.text())
   .then(json => console.log(json));
 }
 

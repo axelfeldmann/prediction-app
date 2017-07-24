@@ -1,27 +1,31 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import passport from 'passport';
 
-var app = express();
-const port = 3001;
+import LocalSignupStrategy from './passport/local-signup';
+import LocalLoginStrategy from './passport/local-login';
 
-import { MongoClient } from 'mongodb';
+import AuthCheckMiddleware from './middleware/auth-check';
 
-//todo: hide my password and stuff somewhere
+import AuthRoutes from './routes/auth';
+import APIRoutes from './routes/api';
+
+import Models from './server/models';
+
+//setup database connection
 const dburl =
 'mongodb://axel:king@ds045785.mlab.com:45785/predictions-app';
+Models.connect(dburl);
 
-var db;
+//configure express app
+const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(passport.initialize());
 
-//routes
+app.use('/api', AuthCheckMiddleware);
+app.use('/api', APIRoutes);
+app.use('/auth', AuthRoutes);
 
-app.get('/api', (req, res) => {
-  res.json({ text: 'Hello World' });
-});
-
-//start up the server only if the database is running
-MongoClient.connect(dburl, (err, database) => {
-  if(err) return console.log(err);
-  db = database;
-  app.listen(port, () => {
-    console.log('server running on ' + port);
-  });
-});
+const port = 3001;
+app.listen(port, () => console.log('running on ' + port));

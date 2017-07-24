@@ -1,10 +1,29 @@
 import { push } from 'react-router-redux';
 
-const login = (to) => (dispatch, getState) => {
-  setTimeout(() => {
-    dispatch({ type: 'LOGIN' });
-    dispatch(push(to));
-  }, 200);
+const headers = new Headers();
+headers.append('Content-Type', 'application/json');
+
+const login = (to, { username, password }) => (dispatch, getState) => {
+  fetch('/login', {
+    method: 'POST',
+    body: JSON.stringify({ username, password }),
+    headers
+  })
+    .then(resp => resp.text())
+    .then(text => console.log(text));
+}
+
+const register = (username, password) => (dispatch, getState) => {
+  console.log('register');
+  const headers = new Headers();
+  headers.append('Content-Type', 'application/json')
+  fetch('/register', {
+    method: 'POST',
+    body: JSON.stringify({ username, password }),
+    headers
+  })
+    .then(resp => resp.text())
+    .then(text => console.log(text));
 }
 
 const logout = () => (dispatch, getState) => {
@@ -16,7 +35,8 @@ const logout = () => (dispatch, getState) => {
 
 const Actions = {
   login,
-  logout
+  logout,
+  register
 };
 
 export default Actions;
