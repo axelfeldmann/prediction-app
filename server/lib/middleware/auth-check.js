@@ -17,7 +17,7 @@ const AuthCheckMiddleware = (req, res, next) => {
 
     return User.findById(userId, (userErr, user) => {
       if(userErr || !user) return res.status(401).end();
-
+      req.username = user.username;
       return next();
     });
   });

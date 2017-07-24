@@ -3,22 +3,46 @@ import { push } from 'react-router-redux';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 
+const getHeaders = (token) => {
+  const headers = { 'Content-Type': 'application/json' }
+  if(token)
+    headers['Authorization'] = 'bearer ' + token;
+  return new Headers(headers);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// api requests
+///////////////////////////////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////////////////////////////////////
 // check authentication
 ///////////////////////////////////////////////////////////////////////////////
 
 const checkAuth = (token) => (dispatch, getState) => {
-
+  fetch('/api/user', {
+    method: 'GET',
+    headers: getHeaders(token)
+  })
+    .then(resp => {
+      if(resp.status !== 200) throw new Error('bad auth');
+      return resp.json();
+    })
+    .then(json => dispatch(authSuccess(json.username)))
+    .catch(err => dispatch(authFailed()));
 };
-
-const authFailed = () => ({
-  type: 'AUTH_FAILED'
-});
 
 const authSuccess = (username, token) => ({
   type: 'AUTH_SUCCESS',
   username,
   token
+});
+
+const authFailed = () => ({
+  type: 'AUTH_FAILED'
+});
+
+const authLoading = () => ({
+  type: 'AUTH_LOADING'
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,7 +53,7 @@ const login = (to, { username, password }, errorCb) => (dispatch, getState) => {
   fetch('/auth/login', {
     method: 'POST',
     body: JSON.stringify({ username, password }),
-    headers
+    headers: getHeaders()
   })
     .then(resp => resp.json())
     .then(json => {
@@ -37,9 +61,9 @@ const login = (to, { username, password }, errorCb) => (dispatch, getState) => {
         window.localStorage.setItem('token', json.token);
         dispatch(authSuccess());
         dispatch(push('/profile'));
-      }
-      else
+      } else {
         errorCb(json.message);
+      }
     });
 };
 
@@ -48,15 +72,19 @@ const login = (to, { username, password }, errorCb) => (dispatch, getState) => {
 ///////////////////////////////////////////////////////////////////////////////
 
 const signup = (username, password, errorCb) => (dispatch, getState) => {
-  const headers = new Headers();
-  headers.append('Content-Type', 'application/json')
   fetch('/auth/signup', {
     method: 'POST',
     body: JSON.stringify({ username, password }),
-    headers
+    headers: getHeaders()
   })
-    .then(resp => resp.text())
-    .then(text => console.log(text));
+    .then(resp => resp.json())
+    .then(json => {
+      if(json.success){
+        dispatch(push('/login'));
+      } else {
+        errorCb(json.message);
+      }
+    });
 };
 
 const logout = () => (dispatch, getState) => {

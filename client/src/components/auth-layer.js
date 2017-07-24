@@ -1,11 +1,12 @@
 import React from 'react';
 import Actions from '../actions/actions';
+import { connect } from 'react-redux';
 
 class AuthLayer extends React.Component {
 
   componentWillMount(){
     const token = window.localStorage.getItem('token');
-    Actions.checkAuth(token);
+    this.props.dispatch(Actions.checkAuth(token));
   }
 
   render(){
@@ -17,4 +18,4 @@ class AuthLayer extends React.Component {
   }
 }
 
-export default AuthLayer;
+export default connect()(AuthLayer);

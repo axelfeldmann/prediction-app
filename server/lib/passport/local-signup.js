@@ -20,7 +20,7 @@ module.exports = new PassportLocalStrategy({
 
   User.findOne({ username }, (err, user) => {
     if(user){
-      return done({ code: 11000, name: 'MongoError' });
+      return done({ name: 'duplicate' });
     } else{
       const userData = {
         username: username,

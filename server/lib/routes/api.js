@@ -2,9 +2,9 @@ import express from 'express';
 
 const APIRouter = new express.Router();
 
-APIRouter.get('/id', (req, res) => {
+APIRouter.get('/user', (req, res) => {
   res.status(200).json({
-    message: req
+    message: req.username
   });
 });
 
