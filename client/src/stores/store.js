@@ -14,14 +14,10 @@ const defaultAuth = { username: '', token: '', status: 'FALSE' };
 const authReducer = (state = defaultAuth, action) => {
   let copy;
   switch(action.type){
-    case 'LOGIN':
-      copy = Object.assign({}, state);
-      copy.auth = true;
-      return copy; 
+    case 'AUTH_SUCCESS':
+    case 'AUTH_FAILED':
+    case 'AUTH_LOADING':
     case 'LOGOUT':
-      copy = Object.assign({}, state);
-      copy.auth = false;
-      return copy;
     default:
       return state;
   }

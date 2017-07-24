@@ -19,6 +19,7 @@ const getHeaders = (token) => {
 ///////////////////////////////////////////////////////////////////////////////
 
 const checkAuth = (token) => (dispatch, getState) => {
+  dispatch(authLoading());
   fetch('/api/user', {
     method: 'GET',
     headers: getHeaders(token)
