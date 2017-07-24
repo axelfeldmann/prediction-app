@@ -17,15 +17,20 @@ module.exports = new PassportLocalStrategy({
   session: false,
   passReqToCallback: true
 }, (req, username, password, done) => {
-  const userData = {
-    username: username,
-    password: password
-  };
 
-  const newUser = new User(userData);
-  newUser.save((err) => {
-    if (err) { return done(err); }
-
-    return done(null);
+  User.findOne({ username }, (err, user) => {
+    if(user){
+      return done({ code: 11000, name: 'MongoError' });
+    } else{
+      const userData = {
+        username: username,
+        password: password
+      };
+      const newUser = new User(userData);
+      newUser.save((err) => {
+        if(err) return done(err);
+        return done(null);
+      })
+    }
   });
 });

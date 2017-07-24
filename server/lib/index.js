@@ -25,9 +25,9 @@ const AuthCheckMiddleware = require('./middleware/auth-check');
 const AuthRoutes = require('./routes/auth');
 const APIRoutes = require('./routes/api');
 
-app.use('/api2', AuthCheckMiddleware);
+app.use('/api', AuthCheckMiddleware);
 
-app.use('/api2', APIRoutes);
+app.use('/api', APIRoutes);
 app.use('/auth', AuthRoutes);
 
 const port = 3001;

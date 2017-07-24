@@ -7,8 +7,8 @@ import thunk from 'redux-thunk';
 export const history = createHistory();
 const middleware = routerMiddleware(history);
 
-//my own reducers and stuff
-const defaultAuth = { auth: false };
+//status can be: TRUE, FALSE, or LOADING
+const defaultAuth = { username: '', token: '', status: 'FALSE' };
 
 //placeholder auth reducer
 const authReducer = (state = defaultAuth, action) => {

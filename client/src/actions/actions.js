@@ -3,17 +3,51 @@ import { push } from 'react-router-redux';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 
-const login = (to, { username, password }) => (dispatch, getState) => {
+///////////////////////////////////////////////////////////////////////////////
+// check authentication
+///////////////////////////////////////////////////////////////////////////////
+
+const checkAuth = (token) => (dispatch, getState) => {
+
+};
+
+const authFailed = () => ({
+  type: 'AUTH_FAILED'
+});
+
+const authSuccess = (username, token) => ({
+  type: 'AUTH_SUCCESS',
+  username,
+  token
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// login actions
+///////////////////////////////////////////////////////////////////////////////
+
+const login = (to, { username, password }, errorCb) => (dispatch, getState) => {
   fetch('/auth/login', {
     method: 'POST',
     body: JSON.stringify({ username, password }),
     headers
   })
-    .then(resp => resp.text())
-    .then(text => console.log(text));
-}
+    .then(resp => resp.json())
+    .then(json => {
+      if(json.success){
+        window.localStorage.setItem('token', json.token);
+        dispatch(authSuccess());
+        dispatch(push('/profile'));
+      }
+      else
+        errorCb(json.message);
+    });
+};
 
-const register = (username, password) => (dispatch, getState) => {
+///////////////////////////////////////////////////////////////////////////////
+// register actions
+///////////////////////////////////////////////////////////////////////////////
+
+const signup = (username, password, errorCb) => (dispatch, getState) => {
   const headers = new Headers();
   headers.append('Content-Type', 'application/json')
   fetch('/auth/signup', {
@@ -23,19 +57,18 @@ const register = (username, password) => (dispatch, getState) => {
   })
     .then(resp => resp.text())
     .then(text => console.log(text));
-}
+};
 
 const logout = () => (dispatch, getState) => {
-  setTimeout(() => {
-    dispatch({ type: 'LOGOUT' });
-    dispatch(push('/'));
-  }, 200);
+  window.localStorage.removeItem('token');
+  return { type: 'LOGOUT' }
 } 
 
 const Actions = {
   login,
   logout,
-  register
+  signup,
+  checkAuth
 };
 
 export default Actions;

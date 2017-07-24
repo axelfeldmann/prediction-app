@@ -50,7 +50,7 @@ const LocalLogin = new PassportLocalStrategy({
       // create a token string
       const token = jwt.sign(payload, config.secret);
       const data = {
-        name: user.name
+        username: user.username
       };
 
       return done(null, token, data);

@@ -45,7 +45,6 @@ AuthRouter.post('/login', (req, res, next) => {
         message: 'Could not process the form.'
       });
     }
-
     return res.json({
       success: true,
       message: 'You have successfully logged in!',

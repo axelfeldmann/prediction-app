@@ -8,9 +8,9 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const apiTest = () => {
-  fetch('/api2')
-  .then(resp => resp.text())
-  .then(json => console.log(json));
+  fetch('/api/id')
+  .then(resp => resp.status)
+  .then(status => console.log(status));
 }
 
 const Homepage = ({ toProfile, toLogin }) => (

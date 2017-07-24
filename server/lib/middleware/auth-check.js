@@ -5,7 +5,8 @@ import config from '../config.json';
 const User = mongoose.model('User');
 
 const AuthCheckMiddleware = (req, res, next) => {
-  if(!req.headers.authorization) req.status(401).end();
+
+  if(!req.headers.authorization) return res.status(401).end();
 
   const token = req.headers.authorization.split(' ')[1];
 

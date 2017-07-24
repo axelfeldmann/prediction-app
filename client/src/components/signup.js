@@ -3,11 +3,11 @@ import Actions from '../actions/actions';
 import { connect } from 'react-redux';
 
 const mapDispatchToProps = (dispatch) => ({
-  register: (username, password) => () => 
-    dispatch(Actions.register(username, password))
+  signup: (username, password) => () => 
+    dispatch(Actions.signup(username, password))
 });
 
-class Register extends React.Component {
+class Signup extends React.Component {
   constructor(){
     super();
     this.state = { username: '', password: '' };
@@ -23,15 +23,15 @@ class Register extends React.Component {
   render(){
     return (
       <div>
-        <h3>register</h3>
+        <h3>Signup</h3>
         username
         <input onChange={ this.updateUsername } type='text' value={ this.state.username }/>
         password
         <input onChange={ this.updatePassword } type='text' value={ this.state.password }/>
-        <button onClick={ this.props.register(this.state.username, this.state.password) }> register </button>
+        <button onClick={ this.props.signup(this.state.username, this.state.password) }> sign up! </button>
       </div>
     );
   }
 }
 
-export default connect(null, mapDispatchToProps)(Register);
+export default connect(null, mapDispatchToProps)(Signup);
