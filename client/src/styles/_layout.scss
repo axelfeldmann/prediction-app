@@ -1,0 +1,50 @@
+body, html{
+  background: $background1;
+}
+
+.container{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  flex-flow: column;
+  display: flex;
+}
+
+.header{
+  background: $background2;
+  display: flex;
+  min-height: $header-height;
+}
+
+.content{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer{
+  display: flex;
+  background: $background2;
+  min-height: $footer-height;
+}
+
+.header-right{
+  margin-right: 10px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-badge{
+  background: $foreground1;
+  min-width: 100px;
+  height: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border: 0;
+}

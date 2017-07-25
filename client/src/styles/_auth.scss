@@ -1,0 +1,46 @@
+.auth-form{
+  background: $foreground2;
+  padding: 10px
+}
+
+.auth-error, 
+.auth-element,
+.auth-submit{
+  height: 40px;
+  width: 300px;
+  display: flex;
+}
+
+.auth-error{
+  background: $foreground1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.auth-element{
+  background: $foreground2;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.auth-element label{
+  flex: 1;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.auth-element input{
+  flex: 2;
+  height: 20px;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 10px;
+}
+
+.auth-submit button{
+  width: 100%;
+}

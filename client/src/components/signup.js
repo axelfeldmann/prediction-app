@@ -34,7 +34,7 @@ class Signup extends React.Component {
     if(authStatus === 'FALSE'){
       return (
         <div className='auth-form'>
-          { this.state.error ? (<div className='auth-element auth-error'>{ this.state.error }</div>) : null }
+          { this.state.error ? (<div className='auth-error'>{ this.state.error }</div>) : null }
           <div className='auth-element'>
             <label>new username</label>
             <input onChange={ this.updateUsername } type='text' value={ this.state.username }/>

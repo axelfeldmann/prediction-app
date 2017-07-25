@@ -43,7 +43,7 @@ class Login extends React.Component {
     } else{ //status === 'FALSE'
       return (
         <div className='auth-form'>
-          { this.state.error ? (<div className='auth-element auth-error'>{ this.state.error }</div>) : null }
+          { this.state.error ? (<div className='auth-error'>{ this.state.error }</div>) : null }
           <div className='auth-element'>
             <label>username</label>
             <input onChange={ this.updateUsername } type='text' value={ this.state.username }/>
@@ -52,9 +52,8 @@ class Login extends React.Component {
             <label>password</label>
             <input onChange={ this.updatePassword } type='text' value={ this.state.password }/>
           </div>
-          <div className='auth-element'>
+          <div className='auth-submit'>
             <button 
-              className='auth-submit' 
               onClick={ login(dest, this.state.username, this.state.password, this.errorCb) }
               >
               login
