@@ -50,7 +50,7 @@ const authLoading = () => ({
 // login actions
 ///////////////////////////////////////////////////////////////////////////////
 
-const login = (to, { username, password }, errorCb) => (dispatch, getState) => {
+const login = (to, username, password, errorCb) => (dispatch, getState) => {
   fetch('/auth/login', {
     method: 'POST',
     body: JSON.stringify({ username, password }),

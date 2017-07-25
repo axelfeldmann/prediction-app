@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import classnames from 'classnames';
+import Actions from '../actions/actions';
 
 const mapStateToProps = (state) => ({
   authStatus: state.auth.status,
@@ -19,26 +20,24 @@ const renderHeader = (props) => {
   const { toProfile, toLogin, toSignup, authStatus, username } = props;
   const classes = classnames('header-right');
 
-  console.log(authStatus);
-  console.log(username);
-
   if(authStatus === 'TRUE'){
     return (
       <div className={ classes }>
-        <div onClick={ toProfile } className='header-badge'>{ username }</div>
+        <button onClick={ toProfile } className='header-badge'>{ username }</button>
+        <button onClick={ Actions.logout() } className='header-badge'>logout</button>
       </div>
     );
   } else if(authStatus === 'LOADING'){
     return (
       <div className={ classes }>
-        <div className='header-badge'>loading...</div>
+        <button className='header-badge'>loading...</button>
       </div>
     );
   } else { //authStatus === 'FALSE'
     return (
       <div className={ classes }>
-        <div onClick={ toLogin } className='header-badge'>login</div>
-        <div onClick={ toSignup } className='header-badge'>sign up</div>
+        <button onClick={ toLogin } className='header-badge'>login</button>
+        <button onClick={ toSignup } className='header-badge'>sign up</button>
       </div>
     );
   }
