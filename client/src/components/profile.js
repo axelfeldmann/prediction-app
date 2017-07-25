@@ -9,12 +9,24 @@ const mapDispatchToProps = (dispatch) => ({
   toHomepage: () => dispatch(push('/'))
 });
 
-const Profile = ({ logout, toHomepage }) => (
-  <div>
-    <h1> profile page </h1>
-    <button onClick={ logout }> logout </button>
-    <button onClick={ toHomepage }> to homepage </button>
+const mapStateToProps = (state) => ({
+  username: state.auth.username
+});
+
+const Profile = ({ logout, toHomepage, username }) => (
+  <div className='container'>
+    <div className='header'>
+      <div className='header-right'>
+        <button onClick={ logout } className='header-badge'> logout </button>
+        <button onClick={ toHomepage } className='header-badge'> to homepage </button>
+      </div>
+    </div>
+    <div className='content'>
+      <h1>welcome, { username }</h1>
+    </div>
+    <div className='footer'>
+    </div>
   </div>
 );
 
-export default withRouter(connect(null, mapDispatchToProps)(Profile));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Profile));

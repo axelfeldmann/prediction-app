@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import classnames from 'classnames';
 import Actions from '../actions/actions';
 
 const mapStateToProps = (state) => ({
@@ -12,19 +11,20 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   toProfile: () => dispatch(push('/profile')),
   toLogin: () => dispatch(push('/login')),
-  toSignup: () => dispatch(push('/signup'))
+  toSignup: () => dispatch(push('/signup')),
+  logout: () => dispatch(Actions.logout())
 });
 
 const renderHeader = (props) => {
 
-  const { toProfile, toLogin, toSignup, authStatus, username } = props;
-  const classes = classnames('header-right');
+  const { toProfile, toLogin, toSignup, authStatus, username, logout } = props;
+  const classes = 'header-right';
 
   if(authStatus === 'TRUE'){
     return (
       <div className={ classes }>
         <button onClick={ toProfile } className='header-badge'>{ username }</button>
-        <button onClick={ Actions.logout() } className='header-badge'>logout</button>
+        <button onClick={ logout } className='header-badge'>logout</button>
       </div>
     );
   } else if(authStatus === 'LOADING'){
@@ -42,8 +42,6 @@ const renderHeader = (props) => {
     );
   }
 } 
-
-
 
 const Homepage = (props) => {
 

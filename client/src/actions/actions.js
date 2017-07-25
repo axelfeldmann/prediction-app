@@ -88,7 +88,7 @@ const signup = (username, password, errorCb) => (dispatch, getState) => {
     });
 };
 
-const logout = () => (dispatch, getState) => {
+const logout = () => {
   window.localStorage.removeItem('token');
   return { type: 'LOGOUT' }
 } 
