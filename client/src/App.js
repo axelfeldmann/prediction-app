@@ -11,6 +11,8 @@ import Signup from './components/signup';
 import PrivateRoute from './components/private-route';
 import AuthLayer from './components/auth-layer';
 
+import './App.css';
+
 const App = () => (
   <Provider store={store}>
     <AuthLayer>

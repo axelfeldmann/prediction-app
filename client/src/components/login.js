@@ -4,7 +4,8 @@ import Actions from '../actions/actions';
 import { Redirect } from 'react-router';
 
 const mapDispatchToProps = (dispatch) => ({
-  login: (to, username, password) => () => dispatch(Actions.login(to, username, password))
+  login: (to, username, password, errorCb) => () => 
+    dispatch(Actions.login(to, username, password, errorCb))
 });
 
 const mapStateToProps = (state) => ({
@@ -14,9 +15,10 @@ const mapStateToProps = (state) => ({
 class Login extends React.Component {
   constructor(){
     super();
-    this.state = { username: '', password: '' };
+    this.state = { username: '', password: '', error: '' };
     this.updateUsername = this.updateUsername.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
+    this.errorCb = this.errorCb.bind(this);
   }
 
   updateUsername(event){
@@ -25,9 +27,11 @@ class Login extends React.Component {
   updatePassword(event){
     this.setState({ password: event.target.value });
   }
+  errorCb(message){
+    this.setState({ error: message });
+  }
 
   renderContent(status, dest, login){
-    console.log(status);
     if(status === 'TRUE'){
       return (
         <Redirect to={ dest }/>
@@ -39,6 +43,7 @@ class Login extends React.Component {
     } else{ //status === 'FALSE'
       return (
         <div className='auth-form'>
+          { this.state.error ? (<div className='auth-element auth-error'>{ this.state.error }</div>) : null }
           <div className='auth-element'>
             <label>username</label>
             <input onChange={ this.updateUsername } type='text' value={ this.state.username }/>
@@ -48,7 +53,12 @@ class Login extends React.Component {
             <input onChange={ this.updatePassword } type='text' value={ this.state.password }/>
           </div>
           <div className='auth-element'>
-            <button className='auth-submit' onClick={ login(dest, this.state.username, this.state.password) }>login</button>
+            <button 
+              className='auth-submit' 
+              onClick={ login(dest, this.state.username, this.state.password, this.errorCb) }
+              >
+              login
+            </button>
           </div>
         </div>
       );
