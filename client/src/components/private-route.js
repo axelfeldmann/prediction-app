@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
 
 const mapStateToProps = (state) => ({
-  auth: state.auth.auth
+  auth: state.auth.status
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -14,7 +14,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 const PrivateRoute = ({ auth, toLogin, component: Component, ...rest }) => (
   <Route { ...rest } render={(props) => {
-    if(auth)
+    console.log('here', auth);
+    if(auth === 'TRUE')
       return (<div> <Component/> </div>)
     else
       return (

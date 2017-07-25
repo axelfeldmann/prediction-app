@@ -11,7 +11,7 @@ class AuthLayer extends React.Component {
 
   render(){
     return (
-      <div>
+      <div className='wrapper'>
         { this.props.children }
       </div>
     );

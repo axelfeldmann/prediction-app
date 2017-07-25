@@ -13,11 +13,32 @@ const defaultAuth = { username: '', token: '', status: 'FALSE' };
 //placeholder auth reducer
 const authReducer = (state = defaultAuth, action) => {
   let copy;
+  console.log(action);
   switch(action.type){
     case 'AUTH_SUCCESS':
+      copy = Object.assign({}, state);
+      copy.username = action.username;
+      copy.token = action.token;
+      copy.status = 'TRUE';
+      return copy;
     case 'AUTH_FAILED':
+      copy = Object.assign({}, state);
+      copy.username = '';
+      copy.token = ''
+      copy.status = 'FALSE';
+      return copy;
     case 'AUTH_LOADING':
+      copy = Object.assign({}, state);
+      copy.username = '';
+      copy.token = '';
+      copy.status = 'LOADING';
+      return copy;
     case 'LOGOUT':
+      copy = Object.assign({}, state);
+      copy.username = '';
+      copy.token = '';
+      copy.status = 'FALSE';
+      return copy;
     default:
       return state;
   }

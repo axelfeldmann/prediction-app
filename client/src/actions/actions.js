@@ -60,7 +60,7 @@ const login = (to, { username, password }, errorCb) => (dispatch, getState) => {
     .then(json => {
       if(json.success){
         window.localStorage.setItem('token', json.token);
-        dispatch(authSuccess());
+        dispatch(authSuccess(json.user.username, json.token));
         dispatch(push('/profile'));
       } else {
         errorCb(json.message);
