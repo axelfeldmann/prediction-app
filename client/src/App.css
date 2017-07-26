@@ -1,5 +1,6 @@
 body, html {
-  background: #494947; }
+  background: #335C81;
+  color: black; }
 
 .container {
   position: absolute;
@@ -12,7 +13,7 @@ body, html {
   display: flex; }
 
 .header {
-  background: #0A2463;
+  background: #272538;
   display: flex;
   min-height: 70px; }
 
@@ -24,7 +25,7 @@ body, html {
 
 .footer {
   display: flex;
-  background: #0A2463;
+  background: #272538;
   min-height: 70px; }
 
 .header-right {
@@ -35,54 +36,53 @@ body, html {
   justify-content: center; }
 
 .header-badge {
-  background: #F56476;
+  background: #65AFFF;
   min-width: 100px;
   height: 30px;
   margin-left: 10px;
   margin-right: 10px;
-  border: 0; }
+  border: 0;
+  color: black; }
 
 .auth-form {
-  background: #C1EDCC;
-  padding: 10px; }
+  background: #272538;
+  padding: 10px;
+  width: 300px; }
 
-.auth-error,
-.auth-element,
-.auth-submit {
+.auth-element {
   height: 40px;
-  width: 300px;
   display: flex; }
 
 .auth-error {
-  background: #F56476;
+  background: #F87060;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  padding: 5px; }
 
 .auth-element {
-  background: #C1EDCC;
   margin-bottom: 10px;
   display: flex;
   flex-direction: row; }
 
 .auth-element label {
-  flex: 1;
+  flex: 3;
   text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  color: white; }
+
+.auth-element input {
+  flex: 5;
+  height: 20px;
   margin-top: auto;
   margin-bottom: auto; }
 
-.auth-element input {
-  flex: 2;
-  height: 20px;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 10px; }
-
 .auth-submit {
+  height: 30px;
   display: flex;
   flex-direction: 1; }
 
 .auth-submit button {
-  margin: 5px;
   flex: 1; }

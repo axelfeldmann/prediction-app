@@ -4,21 +4,41 @@ import config from '../config';
 
 const AuthRouter = new express.Router();
 
-const validateSignup = ({ username, password, confirm }) => {
+const validUsername = (username) => (
+  (username) && 
+  (typeof username === 'string') && 
+  (username.length <= 16) && 
+  (username.length >= 4) 
+);
 
-  let success = true, message = '';
+const validPassword = (password) => (
+  (password) && 
+  (typeof password === 'string') && 
+  (password.length <= 32) && 
+  (password.length >= 8) 
+);
 
-  if(!username || typeof username !== 'string' || username.length < 4 || username.length > 16){
-    success = false;
-    message = 'username invalid - please make sure it has between 4 and 16 characters.';
-  } else if(!password || typeof password !== 'string' || password.length < 8 || password.length > 32){
-    success = false;
-    message = 'password invalid - please make sure it has between 8 and 32 characters.';
-  } else if(confirm !== password){
-    success = false;
-    message = 'passwords do not match - please make sure they do, then resubmit.';
+const validateLogin = ({ username, password }) => {
+  if(!validUsername(username)){
+    return { success: false, message: 'invalid username' };
   }
-  return { success, message };
+  if(!validPassword(password)){
+    return { success: false, message: 'invalid password' };
+  }
+  return { success: true };
+};
+
+const validateSignup = ({ username, password, confirm }) => {
+  if(!validUsername(username)){
+    return { success: false, message: 'invalid username - must be between 4 and 16 characters' };
+  }
+  if(!validPassword(password)){
+    return { success: false, message: 'invalid password - must be between 8 and 32 characters' };
+  }
+  if(password !== confirm){
+    return { success: false, message: 'passwords do not match' };
+  }
+  return { success: true };
 };
 
 AuthRouter.post('/signup', (req, res, next) => {
@@ -59,6 +79,16 @@ AuthRouter.post('/signup', (req, res, next) => {
 AuthRouter.post('/login', (req, res, next) => {
 
   return passport.authenticate('local-login', (err, token, userData) => {
+
+    const validationResult = validateLogin(req.body);
+    if(!validationResult.success){
+      return res.status(400).json({
+        success: false,
+        message: validationResult.message
+      });
+    }
+
+
     if (err) {
       if (err.name === 'IncorrectCredentialsError') {
         return res.status(400).json({

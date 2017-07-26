@@ -1,5 +1,6 @@
 body, html{
   background: $background1;
+  color: $dark-text;
 }
 
 .container{
@@ -47,4 +48,5 @@ body, html{
   margin-left: 10px;
   margin-right: 10px;
   border: 0;
+  color: $dark-text;
 }
