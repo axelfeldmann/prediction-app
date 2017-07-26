@@ -2,6 +2,11 @@ body, html {
   background: #335C81;
   color: black; }
 
+button {
+  background: #65AFFF;
+  border: 0;
+  color: black; }
+
 .container {
   position: absolute;
   left: 0;
@@ -36,13 +41,10 @@ body, html {
   justify-content: center; }
 
 .header-badge {
-  background: #65AFFF;
   min-width: 100px;
   height: 30px;
   margin-left: 10px;
-  margin-right: 10px;
-  border: 0;
-  color: black; }
+  margin-right: 10px; }
 
 .auth-form {
   background: #272538;

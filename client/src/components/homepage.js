@@ -37,7 +37,7 @@ const renderHeader = (props) => {
     return (
       <div className={ classes }>
         <button onClick={ toLogin } className='header-badge'>login</button>
-        <button onClick={ toSignup } className='header-badge'>sign up</button>
+        <button onClick={ toSignup } className='header-badge'>signup</button>
       </div>
     );
   }

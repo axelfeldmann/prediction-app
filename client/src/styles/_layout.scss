@@ -3,6 +3,12 @@ body, html{
   color: $dark-text;
 }
 
+button{
+  background: $foreground1;
+  border: 0;
+  color: $dark-text;
+}
+
 .container{
   position: absolute;
   left: 0;
@@ -42,11 +48,8 @@ body, html{
 }
 
 .header-badge{
-  background: $foreground1;
   min-width: 100px;
   height: 30px;
   margin-left: 10px;
   margin-right: 10px;
-  border: 0;
-  color: $dark-text;
 }
