@@ -17,8 +17,8 @@ const Profile = ({ logout, toHomepage, username }) => (
   <div className='container'>
     <div className='header'>
       <div className='header-right'>
+        <button onClick={ toHomepage } className='header-badge'>home</button>
         <button onClick={ logout } className='header-badge'> logout </button>
-        <button onClick={ toHomepage } className='header-badge'> to homepage </button>
       </div>
     </div>
     <div className='content'>

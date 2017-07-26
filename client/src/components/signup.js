@@ -2,10 +2,12 @@ import React from 'react';
 import Actions from '../actions/actions';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import { push } from 'react-router-redux';
 
 const mapDispatchToProps = (dispatch) => ({
   signup: (username, password, confirm, errorCb) => () => 
-    dispatch(Actions.signup(username, password, confirm, errorCb))
+    dispatch(Actions.signup(username, password, confirm, errorCb)),
+  toHomepage: () => dispatch(push('/'))
 });
 
 const mapStateToProps = (state) => ({
@@ -45,11 +47,11 @@ class Signup extends React.Component {
           </div>
           <div className='auth-element'>
             <label>password</label>
-            <input onChange={ this.updatePassword } type='text' value={ this.state.password }/>
+            <input onChange={ this.updatePassword } type='password' value={ this.state.password }/>
           </div>
           <div className='auth-element'>
             <label>confirm password</label>
-            <input onChange={ this.updateConfirm } type='text' value={ this.state.confirm }/>
+            <input onChange={ this.updateConfirm } type='password' value={ this.state.confirm }/>
           </div>
           <div className='auth-submit'>
             <button
@@ -69,6 +71,9 @@ class Signup extends React.Component {
     return (
       <div className='container'>
         <div className='header'>
+          <div className='header-right'>
+            <button onClick={ this.props.toHomepage } className='header-badge'>home</button>
+          </div>
         </div>
         <div className='content'>
           { this.renderContent(this.props.authStatus, this.props.signup) }

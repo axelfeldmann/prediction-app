@@ -2,10 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Actions from '../actions/actions';
 import { Redirect } from 'react-router';
+import { push } from 'react-router-redux';
 
 const mapDispatchToProps = (dispatch) => ({
   login: (to, username, password, errorCb) => () => 
-    dispatch(Actions.login(to, username, password, errorCb))
+    dispatch(Actions.login(to, username, password, errorCb)),
+  toHomepage: () => dispatch(push('/')),
+  toSignup: () => dispatch(push('/signup'))
 });
 
 const mapStateToProps = (state) => ({
@@ -50,7 +53,7 @@ class Login extends React.Component {
           </div>
           <div className='auth-element'>
             <label>password</label>
-            <input onChange={ this.updatePassword } type='text' value={ this.state.password }/>
+            <input onChange={ this.updatePassword } type='password' value={ this.state.password }/>
           </div>
           <div className='auth-submit'>
             <button 
@@ -65,11 +68,15 @@ class Login extends React.Component {
   }
 
   render(){
-    const { authStatus, login, location } = this.props;
+    const { authStatus, login, location, toHomepage, toSignup } = this.props;
     const dest = (location && location.state) ? (location.state.from.pathname) : '/profile';
     return (
       <div className='container'>
         <div className='header'>
+          <div className='header-right'>
+            <button onClick={ toHomepage } className='header-badge'>home</button>
+            <button onClick={ toSignup } className='header-badge'>signup</button>
+          </div>
         </div>
         <div className='content'>
           { this.renderContent(authStatus, dest, login) }
