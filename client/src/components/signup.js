@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 
 const mapDispatchToProps = (dispatch) => ({
-  signup: (username, password) => () => 
-    dispatch(Actions.signup(username, password))
+  signup: (username, password, confirm, errorCb) => () => 
+    dispatch(Actions.signup(username, password, confirm, errorCb))
 });
 
 const mapStateToProps = (state) => ({
@@ -18,6 +18,7 @@ class Signup extends React.Component {
     this.state = { username: '', password: '', error: '' };
     this.updateUsername = this.updateUsername.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
+    this.updateConfirm = this.updateConfirm.bind(this);
     this.errorCb = this.errorCb.bind(this);
   }
   updateUsername(event){
@@ -25,6 +26,9 @@ class Signup extends React.Component {
   }
   updatePassword(event){
     this.setState({ password: event.target.value });
+  }
+  updateConfirm(event){
+    this.setState({ confirm: event.target.value });
   }
   errorCb(message){
     this.setState({ error: message });
@@ -36,17 +40,20 @@ class Signup extends React.Component {
         <div className='auth-form'>
           { this.state.error ? (<div className='auth-error'>{ this.state.error }</div>) : null }
           <div className='auth-element'>
-            <label>new username</label>
+            <label>username</label>
             <input onChange={ this.updateUsername } type='text' value={ this.state.username }/>
           </div>
           <div className='auth-element'>
-            <label>new password</label>
+            <label>password</label>
             <input onChange={ this.updatePassword } type='text' value={ this.state.password }/>
           </div>
           <div className='auth-element'>
-            <button 
-              className='auth-submit' 
-              onClick={ signup(this.state.username, this.state.password, this.errorCb) }
+            <label>confirm password</label>
+            <input onChange={ this.updateConfirm } type='text' value={ this.state.confirm }/>
+          </div>
+          <div className='auth-submit'>
+            <button
+              onClick={ signup(this.state.username, this.state.password, this.state.confirm, this.errorCb) }
               >
               signup
             </button>

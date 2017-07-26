@@ -41,6 +41,12 @@
   margin-right: 10px;
 }
 
+.auth-submit{
+  display: flex;
+  flex-direction: 1;
+}
+
 .auth-submit button{
-  width: 100%;
+  margin: 5px;
+  flex: 1;
 }

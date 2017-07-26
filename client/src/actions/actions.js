@@ -72,10 +72,10 @@ const login = (to, username, password, errorCb) => (dispatch, getState) => {
 // register actions
 ///////////////////////////////////////////////////////////////////////////////
 
-const signup = (username, password, errorCb) => (dispatch, getState) => {
+const signup = (username, password, confirm, errorCb) => (dispatch, getState) => {
   fetch('/auth/signup', {
     method: 'POST',
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ username, password, confirm }),
     headers: getHeaders()
   })
     .then(resp => resp.json())
