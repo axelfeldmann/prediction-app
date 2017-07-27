@@ -8,7 +8,7 @@ const getHeaders = (token) => {
   if(token)
     headers['Authorization'] = 'bearer ' + token;
   return new Headers(headers);
-}
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // api requests
@@ -71,7 +71,7 @@ const login = (to, username, password, errorCb) => (dispatch, getState) => {
 const logout = () => {
   window.localStorage.removeItem('token');
   return { type: 'LOGOUT' }
-} 
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // register actions
@@ -100,14 +100,12 @@ const signup = (username, password, confirm, errorCb) => (dispatch, getState) =>
 const newLeague = (token, leagueName) => (dispatch, getState) => {
   fetch('/api/newleague', {
     method: 'POST',
-    body: JSON.stringify({ test: leagueName }),
+    body: JSON.stringify({ leagueName }),
     headers: getHeaders(token)
   })
     .then(resp => resp.json())
     .then(json => console.log(json));
-}
-
-
+};
 
 const Actions = {
   login,

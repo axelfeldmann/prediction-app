@@ -13,7 +13,6 @@ const defaultAuth = { username: '', token: '', status: 'FALSE' };
 //placeholder auth reducer
 const authReducer = (state = defaultAuth, action) => {
   let copy;
-  console.log(action);
   switch(action.type){
     case 'AUTH_SUCCESS':
       copy = Object.assign({}, state);
