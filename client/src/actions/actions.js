@@ -28,7 +28,7 @@ const checkAuth = (token) => (dispatch, getState) => {
       if(resp.status !== 200) throw new Error('bad auth');
       return resp.json();
     })
-    .then(json => dispatch(authSuccess(json.username)))
+    .then(json => dispatch(authSuccess(json.username, token)))
     .catch(err => dispatch(authFailed()));
 };
 
@@ -68,6 +68,11 @@ const login = (to, username, password, errorCb) => (dispatch, getState) => {
     });
 };
 
+const logout = () => {
+  window.localStorage.removeItem('token');
+  return { type: 'LOGOUT' }
+} 
+
 ///////////////////////////////////////////////////////////////////////////////
 // register actions
 ///////////////////////////////////////////////////////////////////////////////
@@ -88,16 +93,28 @@ const signup = (username, password, confirm, errorCb) => (dispatch, getState) =>
     });
 };
 
-const logout = () => {
-  window.localStorage.removeItem('token');
-  return { type: 'LOGOUT' }
-} 
+///////////////////////////////////////////////////////////////////////////////
+// league actions
+///////////////////////////////////////////////////////////////////////////////
+
+const newLeague = (token, leagueName) => (dispatch, getState) => {
+  fetch('/api/newleague', {
+    method: 'POST',
+    body: JSON.stringify({ test: leagueName }),
+    headers: getHeaders(token)
+  })
+    .then(resp => resp.json())
+    .then(json => console.log(json));
+}
+
+
 
 const Actions = {
   login,
   logout,
   signup,
-  checkAuth
+  checkAuth,
+  newLeague
 };
 
 export default Actions;
