@@ -8,4 +8,11 @@ APIRouter.get('/user', (req, res) => {
   });
 });
 
+APIRouter.post('/newleague', (req, res) => {
+  console.log(req.body);
+  res.status(200).json({
+    success: true
+  });
+});
+
 module.exports = APIRouter;
