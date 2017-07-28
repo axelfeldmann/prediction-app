@@ -6,7 +6,7 @@ import { Route } from 'react-router';
 
 import Homepage from './components/homepage';
 import Login from './components/login';
-import Profile from './components/profile';
+import MainPage from './components/mainpage';
 import Signup from './components/signup';
 import PrivateRoute from './components/private-route';
 import AuthLayer from './components/auth-layer';
@@ -20,8 +20,12 @@ const App = () => (
         <div>
           <Route exact path="/" component={Homepage}/>
           <Route path="/login" component={Login}/>
-          <PrivateRoute path="/profile" component={Profile}/>
           <Route path="/signup" component={Signup}/>
+        { /* all of this is actually the main page component */}
+          <PrivateRoute path="/profile" component={MainPage}/>
+          <PrivateRoute path="/leagues" component={MainPage}/>
+          <PrivateRoute path="/newleague" component={MainPage}/>
+          <PrivateRoute path="/invites" component={MainPage}/>
         </div>
       </ConnectedRouter>
     </AuthLayer>

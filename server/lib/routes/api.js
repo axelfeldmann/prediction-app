@@ -12,7 +12,6 @@ APIRouter.get('/user', (req, res) => {
 });
 
 APIRouter.post('/newleague', (req, res) => {
-  console.log(req.body);
   const leagueData = { leagueName: req.body.leagueName };
   const newLeague = new League(leagueData);
   newLeague.save((err) => {
