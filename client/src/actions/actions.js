@@ -97,7 +97,7 @@ const signup = (username, password, confirm, errorCb) => (dispatch, getState) =>
 // league actions
 ///////////////////////////////////////////////////////////////////////////////
 
-const newLeague = (token, leagueName) => (dispatch, getState) => {
+const newLeague = (token, leagueName, errorCb) => (dispatch, getState) => {
   fetch('/api/newleague', {
     method: 'POST',
     body: JSON.stringify({ leagueName }),
