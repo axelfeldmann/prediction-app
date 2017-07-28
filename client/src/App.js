@@ -18,14 +18,13 @@ const App = () => (
     <AuthLayer>
       <ConnectedRouter history={history}>
         <div>
-          <Route exact path="/" component={Homepage}/>
-          <Route path="/login" component={Login}/>
-          <Route path="/signup" component={Signup}/>
-        { /* all of this is actually the main page component */}
-          <PrivateRoute path="/profile" component={MainPage}/>
-          <PrivateRoute path="/leagues" component={MainPage}/>
-          <PrivateRoute path="/newleague" component={MainPage}/>
-          <PrivateRoute path="/invites" component={MainPage}/>
+          <Route exact path="/" component={ Homepage }/>
+          <Route path="/login" component={ Login }/>
+          <Route path="/signup" component={ Signup }/>
+          <PrivateRoute path="/profile" component={ MainPage }/>
+          <PrivateRoute path="/leagues" component={ MainPage }/>
+          <PrivateRoute path="/newleague" component={ MainPage }/>
+          <PrivateRoute path="/invites" component={ MainPage }/>
         </div>
       </ConnectedRouter>
     </AuthLayer>
