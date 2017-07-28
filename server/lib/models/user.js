@@ -3,11 +3,10 @@ import bcrypt from 'bcrypt';
 import autoIncrement from 'mongoose-auto-increment';
 
 const UserSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    index: { unique: true }
-  },
-  password: String
+  username: String,
+  password: String,
+  leagueIDs: [Number],
+  inviteIDs: [Number]
 });
 
 UserSchema.methods.comparePassword = function comparePassword(password, callback) {
