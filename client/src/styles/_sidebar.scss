@@ -1,0 +1,27 @@
+.sidebar{
+  max-width: $sidebar-max;
+  min-width: $sidebar-min;
+  flex: 1; 
+  background: $foreground1;
+}
+
+.main-content{
+  flex: 7;
+}
+
+.sidebar-link{
+  margin: 5px 5px 5px 5px;
+  display: flex;
+  height: 30px;
+  background: $foreground2;
+  padding-left: 10px;
+  align-items: center;
+  color: $light-text;
+}
+
+.sidebar-link.selected{
+  color: $dark-text;
+  background: $foreground1;
+  border: solid;
+  border-width: 1px;
+}

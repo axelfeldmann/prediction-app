@@ -25,8 +25,7 @@ button {
 .content {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center; }
+  flex-flow: row; }
 
 .footer {
   display: flex;
@@ -88,3 +87,27 @@ button {
 
 .auth-submit button {
   flex: 1; }
+
+.sidebar {
+  max-width: 200px;
+  min-width: 120px;
+  flex: 1;
+  background: #65AFFF; }
+
+.main-content {
+  flex: 7; }
+
+.sidebar-link {
+  margin: 5px 5px 5px 5px;
+  display: flex;
+  height: 30px;
+  background: #272538;
+  padding-left: 10px;
+  align-items: center;
+  color: white; }
+
+.sidebar-link.selected {
+  color: black;
+  background: #65AFFF;
+  border: solid;
+  border-width: 1px; }
