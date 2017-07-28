@@ -58,7 +58,7 @@ AuthRouter.post('/signup', (req, res, next) => {
         // the 409 HTTP status code is for conflict error
         return res.status(409).json({
           success: false,
-          message: 'Check the form for errors.'
+          message: 'Username taken. Be more creative.'
         });
       }
 

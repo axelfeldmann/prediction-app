@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import autoIncrement from 'mongoose-auto-increment';
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -34,5 +35,6 @@ UserSchema.pre('save', function saveHook(next) {
   });
 });
 
+UserSchema.plugin(autoIncrement.plugin, 'User');
 
 module.exports = mongoose.model('User', UserSchema);
