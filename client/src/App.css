@@ -46,7 +46,7 @@ button {
   margin-right: 10px; }
 
 .auth-form {
-  background: #272538;
+  background: #DD614A;
   padding: 10px;
   width: 300px; }
 
@@ -101,13 +101,14 @@ button {
   margin: 5px 5px 5px 5px;
   display: flex;
   height: 30px;
-  background: #272538;
+  background: #DD614A;
   padding-left: 10px;
   align-items: center;
+  cursor: pointer; }
+
+.sidebar-link:hover {
   color: white; }
 
 .sidebar-link.selected {
-  color: black;
-  background: #65AFFF;
-  border: solid;
-  border-width: 1px; }
+  background: #272538;
+  color: white; }

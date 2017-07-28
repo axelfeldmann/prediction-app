@@ -16,12 +16,14 @@
   background: $foreground2;
   padding-left: 10px;
   align-items: center;
+  cursor: pointer;
+}
+
+.sidebar-link:hover{
   color: $light-text;
 }
 
 .sidebar-link.selected{
-  color: $dark-text;
-  background: $foreground1;
-  border: solid;
-  border-width: 1px;
+  background: $background2;
+  color: $light-text;
 }
