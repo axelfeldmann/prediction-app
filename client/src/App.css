@@ -46,9 +46,12 @@ button {
   margin-right: 10px; }
 
 .auth-form {
-  background: #DD614A;
+  background: #272538;
   padding: 10px;
-  width: 300px; }
+  width: 300px;
+  align-self: center;
+  margin-left: auto;
+  margin-right: auto; }
 
 .auth-element {
   height: 40px;
@@ -95,7 +98,9 @@ button {
   background: #65AFFF; }
 
 .main-content {
-  flex: 7; }
+  padding: 10px;
+  flex: 7;
+  display: flex; }
 
 .sidebar-link {
   margin: 5px 5px 5px 5px;
