@@ -58,7 +58,6 @@ LeagueRouter.get('/', (req, res) => {
       } else {
 
         const leagues = user.leagues.map((l) => [l.name, l.creator]);
-
         res.status(200).json({
           success: true,
           leagues
