@@ -14,8 +14,9 @@ const mapDispatchToProps = (dispatch) => ({
 
 const PrivateRoute = ({ auth, toLogin, component: Component, ...rest }) => (
   <Route { ...rest } render={(props) => {
-    if(auth === 'TRUE')
+    if(auth === 'TRUE'){
       return (<div> <Component/> </div>)
+    }
     else
       return (
         <Redirect to={{

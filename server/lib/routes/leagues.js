@@ -21,4 +21,23 @@ LeagueRouter.post('/new', (req, res) => {
   });
 });
 
+LeagueRouter.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    leagues: ['is', 'this', 'a', 'joke']
+  });
+});
+
+LeagueRouter.get('/invites', (req, res) => {
+  res.status(200).json({
+    success: true
+  });
+});
+
+LeagueRouter.post('/invite', (req, res) => {
+  res.status(200).json({
+    message: '/invite'
+  });
+});
+
 module.exports = LeagueRouter;
