@@ -20,7 +20,7 @@ const getHeaders = (token) => {
 
 const checkAuth = (token) => (dispatch, getState) => {
   dispatch(authLoading());
-  fetch('/api/user', {
+  fetch('/user/check', {
     method: 'GET',
     headers: getHeaders(token)
   })
@@ -98,7 +98,7 @@ const signup = (username, password, confirm, errorCb) => (dispatch, getState) =>
 ///////////////////////////////////////////////////////////////////////////////
 
 const newLeague = (token, leagueName, errorCb) => (dispatch, getState) => {
-  fetch('/api/newleague', {
+  fetch('/leagues/new', {
     method: 'POST',
     body: JSON.stringify({ leagueName }),
     headers: getHeaders(token)

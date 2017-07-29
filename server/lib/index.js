@@ -19,16 +19,18 @@ const LocalLoginStrategy = require('./passport/local-login');
 passport.use('local-signup', LocalSignupStrategy);
 passport.use('local-login', LocalLoginStrategy);
 
-
 const AuthCheckMiddleware = require('./middleware/auth-check');
 
 const AuthRoutes = require('./routes/auth');
-const APIRoutes = require('./routes/api');
+const UserRoutes = require('./routes/user');
+const LeagueRoutes = require('./routes/leagues');
 
-app.use('/api', AuthCheckMiddleware);
+app.use('/user', AuthCheckMiddleware);
+app.use('/leagues', AuthCheckMiddleware);
 
-app.use('/api', APIRoutes);
+app.use('/user', UserRoutes);
 app.use('/auth', AuthRoutes);
+app.use('/leagues', LeagueRoutes);
 
 const port = 3001;
 app.listen(port, () => console.log('running on ' + port));
