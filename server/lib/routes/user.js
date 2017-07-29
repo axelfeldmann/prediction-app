@@ -5,7 +5,7 @@ const UserRouter = new express.Router();
 
 UserRouter.get('/check', (req, res) => {
   res.status(200).json({
-    username: req.username
+    username: req.user.username
   });
 });
 

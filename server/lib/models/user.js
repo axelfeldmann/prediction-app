@@ -5,8 +5,8 @@ import autoIncrement from 'mongoose-auto-increment';
 const UserSchema = new mongoose.Schema({
   username: String,
   password: String,
-  leagueIDs: [Number],
-  inviteIDs: [Number]
+  leagues: [{ type: Number, ref: 'League' }],
+  invites: [{ type: Number, ref: 'League' }]
 });
 
 UserSchema.methods.comparePassword = function comparePassword(password, callback) {

@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 import autoIncrement from 'mongoose-auto-increment';
 
 const LeagueSchema = new mongoose.Schema({
-  leagueName: String,
-  creatorID: Number,
-  memberIDs: [Number],
-  invitedIDs: [Number]
+  name: String,
+  creator: { type: Number, ref: 'User' },
+  members: [{ type: Number, ref: 'User' }],
+  invites: [{ type: Number, ref: 'User' }]
 });
 
 LeagueSchema.plugin(autoIncrement.plugin, 'League');
