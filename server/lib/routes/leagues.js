@@ -17,26 +17,26 @@ LeagueRouter.post('/new', (req, res) => {
   newLeague.save((err) => {
 
     if(err){
-
-      console.log(err);
       res.status(500).json({
         success: false,
         message: 'error - could not create new league'
       });
 
     } else {
-
       User.update(
         { _id: req.user._id },
         { $push: { leagues: newLeague._id } },
-        (err, arg2) => {
-          console.log(err);
-          console.log(arg2);
-          res.status(200).json({
-            success: true
-          });
-        }
-      );
+        (err) => {
+          if(err)
+            res.status(500).json({
+              success: false,
+              message: 'error - could not initialize new league'
+            });
+          else 
+            res.status(200).json({
+              success: true
+            });
+      });
 
     }
   });
@@ -46,7 +46,7 @@ LeagueRouter.get('/', (req, res) => {
   
   User
     .findOne({ _id: req.user._id })
-    .populate({ path: 'leagues', select: 'name' })
+    .populate({ path: 'leagues', select: 'name creator' })
     .exec((err, user) => {
       if(err){
 
@@ -57,7 +57,7 @@ LeagueRouter.get('/', (req, res) => {
 
       } else {
 
-        const leagues = user.leagues.map((l) => l.name);
+        const leagues = user.leagues.map((l) => [l.name, l.creator]);
 
         res.status(200).json({
           success: true,
