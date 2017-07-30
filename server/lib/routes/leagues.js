@@ -46,7 +46,8 @@ LeagueRouter.get('/', (req, res) => {
   
   User
     .findOne({ _id: req.user._id })
-    .populate({ path: 'leagues', select: 'name creator' })
+    .populate({ path: 'leagues', select: 'name creator _id',
+      populate: { path: 'creator', select: 'username' } })
     .exec((err, user) => {
       if(err){
 
@@ -56,8 +57,11 @@ LeagueRouter.get('/', (req, res) => {
         });
 
       } else {
+        
+        const leagues = user.leagues.map(({ _id, name, creator }) => ({
+          _id, name, creator: creator.username
+        }));
 
-        const leagues = user.leagues.map((l) => [l.name, l.creator]);
         res.status(200).json({
           success: true,
           leagues
