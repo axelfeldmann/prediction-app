@@ -94,7 +94,11 @@ LeagueRouter.get('/:leagueID', (req, res) => {
 
       res.status(200).json({
         success: true,
-        league: { _id: league._id, name: league.name, creator: league.creator }
+        league: {
+          _id: league._id,
+          name: league.name,
+          creator: league.creator.username
+        }
       });
 
     });
