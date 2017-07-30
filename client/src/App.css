@@ -45,6 +45,10 @@ button {
   margin-left: 10px;
   margin-right: 10px; }
 
+.router {
+  flex: 1;
+  display: flex; }
+
 .auth-form {
   background: #272538;
   padding: 10px;
@@ -117,3 +121,46 @@ button {
 .sidebar-link.selected {
   background: #272538;
   color: white; }
+
+.league-lists {
+  margin-top: 5px;
+  flex: 1;
+  flex-flow: column;
+  display: flex; }
+
+.league-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column; }
+
+.full-list {
+  flex: 1;
+  display: flex;
+  flex-flow: column; }
+
+.list-label {
+  border-bottom-style: solid;
+  border-bottom-width: 1px; }
+
+.full-list-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column; }
+
+.full-list tr {
+  display: flex;
+  flex-flow: row;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  cursor: pointer; }
+
+.full-list tr:hover {
+  background: #272538;
+  color: white; }
+
+td.title {
+  margin-left: 10px;
+  flex: 7; }
+
+td.right {
+  flex: 3; }

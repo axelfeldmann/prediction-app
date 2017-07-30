@@ -4,7 +4,7 @@ import LeagueList from './league-list';
 import { Route } from 'react-router';
 
 const Leagues = () => (
-  <div>
+  <div className='router'>
     <Route exact path='/leagues/' component={ LeagueList }/>
     <Route path='/leagues/:leagueID' component={ LeagueView }/>
   </div>

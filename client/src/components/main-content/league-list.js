@@ -47,13 +47,21 @@ class LeagueList extends React.Component{
         { (creatorLeagues.length > 0) && (
           <div className='league-list'>
             <label className='list-label'>Leagues (admin)</label>
-            <table><tbody className='full-list'>{ creatorLeagues }</tbody></table>
+            <table className='full-list'>
+              <tbody className='full-list-body'>
+                { creatorLeagues }
+              </tbody>
+            </table>
           </div>
           ) }
         { (memberLeagues.length > 0) && (
           <div className='league-list'>
             <label className='list-label'>Leagues (member)</label>
-            <table><tbody className='full-list'>{ memberLeagues }</tbody></table>
+            <table className='full-list'>
+              <tbody className='full-list-body'>
+                { memberLeagues }
+              </tbody>
+            </table>
           </div>
           ) }
       </div>
