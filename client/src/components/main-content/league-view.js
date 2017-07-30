@@ -16,7 +16,8 @@ const mapDispatchToProps = (dispatch) => ({
 class LeagueView extends React.Component{
 
   componentDidMount(){
-    this.props.getLeague(this.props.token);
+    console.log(this.props);
+    this.props.getLeague(this.props.token, this.props.match.params.leagueID);
   }
 
   render(){

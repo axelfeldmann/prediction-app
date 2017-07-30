@@ -71,6 +71,35 @@ LeagueRouter.get('/', (req, res) => {
     });
 });
 
+LeagueRouter.get('/:leagueID', (req, res) => {
+
+  const leagueID = parseInt(req.params.leagueID, 10);
+
+  League
+    .findOne({ _id: leagueID })
+    .populate({ path: 'creator', select: 'username' })
+    .exec((err, league) => {
+
+      if(!league)
+        return res.status(404).json({
+          success: false,
+          message: 'league not found'
+        });
+
+      if(!league.members.includes(req.user._id))
+        return res.status(401).json({
+          success: false,
+          message: 'you are not a member of this league'
+        });
+
+      res.status(200).json({
+        success: true,
+        league: { _id: league._id, name: league.name, creator: league.creator }
+      });
+
+    });
+});
+
 LeagueRouter.get('/invites', (req, res) => {
   res.status(200).json({
     success: true

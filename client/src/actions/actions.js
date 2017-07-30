@@ -164,7 +164,8 @@ const gotLeague = (league) => ({
 const getLeague = (token, leagueID) => (dispatch, getState) => {
   dispatch(loadingLeague());
   fetch(`/leagues/${leagueID}`, {
-
+    method: 'GET',
+    headers: getHeaders(token)
   })
     .then(resp => resp.json())
     .then(json => {
