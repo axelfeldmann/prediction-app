@@ -94,7 +94,7 @@ const signup = (username, password, confirm, errorCb) =>
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-// league actions
+// new league action
 ////////////////////////////////////////////////////////////////////////////////
 
 const newLeague = (token, leagueName, errorCb) => (dispatch, getState) => {
@@ -109,22 +109,26 @@ const newLeague = (token, leagueName, errorCb) => (dispatch, getState) => {
     });
 };
 
-const loadingLeagues = () => ({
-  type: 'LOADING_LEAGUES'
+////////////////////////////////////////////////////////////////////////////////
+// league list actions
+////////////////////////////////////////////////////////////////////////////////
+
+const loadingLeagueList = () => ({
+  type: 'LOADING_LEAGUE_LIST'
 });
 
-const leaguesFailed = (error) => ({
-  type: 'LEAGUES_FAILED',
+const leagueListFailed = (error) => ({
+  type: 'LEAGUE_LIST_FAILED',
   error
 });
 
-const gotLeagues = (leagues) => ({
-  type: 'GOT_LEAGUES',
+const gotLeagueList = (leagues) => ({
+  type: 'GOT_LEAGUE_LIST',
   leagues
 });
 
-const getLeagues = (token) => (dispatch, getState) => {
-  dispatch(loadingLeagues());
+const getLeagueList = (token) => (dispatch, getState) => {
+  dispatch(loadingLeagueList());
   fetch('/leagues/', {
     method: 'GET',
     headers: getHeaders(token)
@@ -132,16 +136,45 @@ const getLeagues = (token) => (dispatch, getState) => {
     .then(resp => resp.json())
     .then(json => {
       if(json.success){
-        dispatch(gotLeagues(json.leagues));
+        dispatch(gotLeagueList(json.leagues));
       } else {
-        dispatch(leaguesFailed(json.message));
+        dispatch(leagueListFailed(json.message));
       }
-    })
+    });
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-// invite actions
+// league actions
 ////////////////////////////////////////////////////////////////////////////////
+
+const loadingLeague = () => ({
+  type: 'LOADING_LEAGUE'
+});
+
+const leagueFailed = (error) => ({
+  type: 'LEAGUE_FAILED',
+  error
+});
+
+const gotLeague = (league) => ({
+  type: 'GOT_LEAGUE',
+  league
+});
+
+const getLeague = (token, leagueID) => {
+  dispatch(loadingLeague());
+  fetch(`/leagues/${leagueID}`, {
+
+  })
+    .then(resp => resp.json())
+    .then(json => {
+      if(json.success){
+        dispatch(gotLeague(json.league));
+      } else {
+        dispatch(leagueFailed(json.message));
+      }
+    });
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // export actions
@@ -153,7 +186,7 @@ const Actions = {
   signup,
   checkAuth,
   newLeague,
-  getLeagues
+  getLeagueList
 };
 
 export default Actions;

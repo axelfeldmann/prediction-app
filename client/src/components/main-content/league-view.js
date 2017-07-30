@@ -1,5 +1,5 @@
 import React from 'react';
 
-const LeagueView = ({ name }) => (<h1>{ name }</h1>);
+const LeagueView = (props) => (<h1>{console.log(props)}hi</h1>);
 
 export default LeagueView;
