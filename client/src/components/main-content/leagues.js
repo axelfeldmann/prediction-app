@@ -25,9 +25,10 @@ class Leagues extends React.Component{
   }
 
   generateRoutes(leagues){
-    return leagues.map(({ _id, name, creator }) => {
-      return (<Route path={ _id.toString() } key={ _id } render={ () => <LeagueView name={ name }/> }/>);
+    const routes = leagues.map(({ _id, name, creator }) => {
+      return (<Route path={ `/leagues/${_id}` } key={ _id } render={ () => (<LeagueView name={ name }/>) }/>);
     });
+    return routes;
   }
 
   listLeagues(leagues){
@@ -35,6 +36,7 @@ class Leagues extends React.Component{
   }
 
   render(){
+
     const { loading, error, leagues } = this.props;
 
     if(loading){

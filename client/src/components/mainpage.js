@@ -19,30 +19,22 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const renderContent = ({ pathname }) => {
-  let component;
-  switch(pathname){
-    case '/profile':
-      component = <Profile/>
-      break;
-    case '/leagues':
-      component = <Leagues/>
-      break;
-    case '/newleague':
-      component = <NewLeague/>
-      break;
-    case '/invites':
-      component = <Invites/>
-      break;
-    default:
-      return null;
-  }
+  let component = null;
+  if(pathname.startsWith('/profile'))
+    component = (<Profile/>)
+  if(pathname.startsWith('/newleague'))
+    component = (<NewLeague/>)
+  if(pathname.startsWith('/invites'))
+    component = (<Invites/>)
+  if(pathname.startsWith('/leagues'))
+    component = (<Leagues/>)
   return (<div className='main-content'>{ component }</div>);
 };
 
 const renderSidebar = ({ pathname }, goTo) => {
 
   const classes = (path) => classnames('sidebar-link', {
-    'selected': path === pathname
+    'selected': pathname.startsWith(path)
   });
 
   const sidebarLink = (path, label) => (
@@ -59,7 +51,7 @@ const renderSidebar = ({ pathname }, goTo) => {
   );
 };
 
-const MainPage = ({ logout, location, goTo }) => (
+const MainPage = ({ logout, location, goTo, match }) => (
   <div className='container'>
     <div className='header'>
       <div className='header-right'>
