@@ -161,7 +161,7 @@ const gotLeague = (league) => ({
   league
 });
 
-const getLeague = (token, leagueID) => {
+const getLeague = (token, leagueID) => (dispatch, getState) => {
   dispatch(loadingLeague());
   fetch(`/leagues/${leagueID}`, {
 
@@ -186,7 +186,8 @@ const Actions = {
   signup,
   checkAuth,
   newLeague,
-  getLeagueList
+  getLeagueList,
+  getLeague
 };
 
 export default Actions;
