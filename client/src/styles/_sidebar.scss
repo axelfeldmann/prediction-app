@@ -3,6 +3,9 @@
   min-width: $sidebar-min;
   flex: 1; 
   background: $foreground1;
+  border-right-style: solid;
+  border-right-width: 5px;
+  border-right-color: $background2;
 }
 
 .main-content{
