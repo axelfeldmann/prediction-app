@@ -38,10 +38,13 @@ class LeagueView extends React.Component{
   render(){
     const { loading, error, league, username } = this.props;
     const isCreator = ( league.creator === username);
+
     if(loading)
       return (<h1>loading...</h1>);
+
     if(error)
       return (<h1>{ error }</h1>);
+    
     return (
       <div className='league-view-container'>
         { isCreator &&

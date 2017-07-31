@@ -36,7 +36,8 @@ button {
   margin-right: 10px;
   margin-left: auto;
   display: flex;
-  justify-content: center; }
+  justify-content: center;
+  align-items: center; }
 
 .header-badge {
   min-width: 100px;

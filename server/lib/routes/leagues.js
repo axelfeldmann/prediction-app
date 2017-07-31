@@ -77,7 +77,7 @@ LeagueRouter.get('/:leagueID', (req, res) => {
 
   League
     .findOne({ _id: leagueID })
-    .populate({ path: 'creator', select: 'username' })
+    .populate({ path: 'creator members', select: 'username' })
     .exec((err, league) => {
 
       if(!league)
@@ -86,7 +86,9 @@ LeagueRouter.get('/:leagueID', (req, res) => {
           message: 'league not found'
         });
 
-      if(!league.members.includes(req.user._id))
+      const members = league.members.map((m) => m.username);
+
+      if(!members.includes(req.user.username))
         return res.status(401).json({
           success: false,
           message: 'you are not a member of this league'
@@ -97,7 +99,8 @@ LeagueRouter.get('/:leagueID', (req, res) => {
         league: {
           _id: league._id,
           name: league.name,
-          creator: league.creator.username
+          creator: league.creator.username,
+          members: members
         }
       });
 
