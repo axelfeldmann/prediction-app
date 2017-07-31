@@ -12,15 +12,27 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getLeague: (token, leagueID) => dispatch(Actions.getLeague(token, leagueID))
+  getLeague: (token, leagueID) => dispatch(Actions.getLeague(token, leagueID)),
+  sendInvite: (token, leagueID, invitee, errorCb) =>
+    dispatch(Actions.sendInvite(token, leagueID, invitee, errorCb))
 });
 
 class LeagueView extends React.Component{
 
   constructor(){
     super();
-    this.state = { membersExp: false, inviteExp: false, contentExp: false };
+    this.state = {
+      membersExp: false,
+      inviteExp: false,
+      contentExp: false,
+      error: '',
+      invitee: ''
+    };
     this.toggleFn = this.toggleFn.bind(this);
+    this.renderInvites = this.renderInvites.bind(this);
+    this.updateInvitee = this.updateInvitee.bind(this);
+    this.submit = this.submit.bind(this);
+    this.errorCb = this.errorCb.bind(this);
   }
 
   componentDidMount(){
@@ -29,10 +41,46 @@ class LeagueView extends React.Component{
 
   toggleFn(field){
     return () => {
-      const update = {};
+      const update = { error: '' };
       update[field] = !this.state[field];
       this.setState(update);
     };
+  }
+
+  updateInvitee(event){
+    this.setState({ invitee: event.target.value });
+  }
+
+  errorCb(message){
+    this.setState({ error: message });
+  }
+
+  submit(){
+    const { token, league, sendInvite } = this.props;
+    const { invitee } = this.state;
+    this.setState({ error: '', invitee: '' });
+    sendInvite(token, league._id, invitee, this.errorCb);
+  }
+
+  renderInvites(){
+    const invites = this.props.league.invites;
+    const { error } = this.state;
+    const outstanding = invites.map((invitee, idx) => (<div key={ idx }>{ invitee }</div>));
+    return (
+      <div className='invite-form'>
+        { error ? <div className='form-error'>{ error }</div> : null }
+        <label>invite:</label>
+        <input
+          onChange={ this.updateInvitee }
+          type='text'
+          value={ this.state.invitee }
+        />
+        <div className='form-submit'>
+          <button onClick={ this.submit }>create</button>
+        </div>
+        { outstanding }
+      </div>
+    );
   }
 
   render(){
@@ -44,9 +92,10 @@ class LeagueView extends React.Component{
 
     if(error)
       return (<h1>{ error }</h1>);
-    
+
     return (
       <div className='league-view-container'>
+        <h2>{ league.name }</h2>
         { isCreator &&
           /* only display invites widget if the person is the league creator */
           <Expandable
@@ -54,7 +103,7 @@ class LeagueView extends React.Component{
             expanded={ this.state.inviteExp }
             label='League Invites'
           >
-            <h1>invites</h1>
+            { this.renderInvites() }
           </Expandable>
         }
         <Expandable

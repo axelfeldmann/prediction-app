@@ -105,7 +105,9 @@ const newLeague = (token, leagueName, errorCb) => (dispatch, getState) => {
   })
     .then(resp => resp.json())
     .then(json => {
-      dispatch(push('/leagues'));
+      if(json.success)
+        return dispatch(push('/leagues'));
+      errorCb(json.message);
     });
 };
 
@@ -178,6 +180,31 @@ const getLeague = (token, leagueID) => (dispatch, getState) => {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+// invite actions
+////////////////////////////////////////////////////////////////////////////////
+
+const newInvites = (invites) => ({
+  type: 'NEW_INVITES',
+  invites
+});
+
+const sendInvite = (token, leagueID, invitee, errorCb) => 
+  (dispatch, getState) => {
+    fetch(`/leagues/invite`, {
+      method: 'POST',
+      body: JSON.stringify({ leagueID, invitee }),
+      headers: getHeaders(token)
+    })
+      .then(resp => resp.json())
+      .then(json => {
+        if(!json.success)
+          errorCb(json.message);
+        else
+          dispatch(newInvites(json.invites));
+      });
+};
+
+////////////////////////////////////////////////////////////////////////////////
 // export actions
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -188,7 +215,8 @@ const Actions = {
   checkAuth,
   newLeague,
   getLeagueList,
-  getLeague
+  getLeague,
+  sendInvite
 };
 
 export default Actions;

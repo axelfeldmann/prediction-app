@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import autoIncrement from 'mongoose-auto-increment';
 
 const LeagueSchema = new mongoose.Schema({
-  name: String,
+  name: { type: String, unique: true },
   creator: { type: Number, ref: 'User' },
   members: [{ type: Number, ref: 'User' }],
   invites: [{ type: Number, ref: 'User' }]

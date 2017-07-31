@@ -13,8 +13,8 @@ const Expandable = ({ toggleFn, expanded, children, label }) => {
   });
 
   return (
-    <div  className='expandable-container' onClick={ toggleFn }>
-      <div className={ labelClasses }>
+    <div  className='expandable-container'>
+      <div className={ labelClasses } onClick={ toggleFn }>
         <span className={ chevronClasses }/>
         <label>{ label }</label>
       </div>

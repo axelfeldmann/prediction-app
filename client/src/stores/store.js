@@ -32,6 +32,12 @@ const leagueReducer = (state = defaultLeague, action) => {
       copy.error = '';
       copy.loading = false;
       return copy;
+    case 'NEW_INVITES':
+      copy = Object.assign({}, state);
+      const leagueCopy = Object.assign({}, copy.league);
+      leagueCopy.invites = action.invites;
+      copy.league = leagueCopy;
+      return copy;
     default:
       return state;
   }
