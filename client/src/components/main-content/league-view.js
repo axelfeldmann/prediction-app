@@ -8,7 +8,8 @@ const mapStateToProps = (state) => ({
   league: state.league.league,
   error: state.league.error,
   loading: state.league.loading,
-  username: state.auth.username
+  username: state.auth.username,
+  inviteesLoading: state.league.inviteesLoading
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -64,6 +65,7 @@ class LeagueView extends React.Component{
 
   renderInvites(){
     const invites = this.props.league.invites;
+    const loading = this.props.inviteesLoading;
     const { error } = this.state;
     const outstanding = invites.map((invitee, idx) => (<div key={ idx }>{ invitee }</div>));
     return (
@@ -78,7 +80,7 @@ class LeagueView extends React.Component{
         <div className='form-submit'>
           <button onClick={ this.submit }>create</button>
         </div>
-        { outstanding }
+        { (loading) ? (<h1>loading...</h1>) : (outstanding) }
       </div>
     );
   }

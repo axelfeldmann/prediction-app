@@ -9,7 +9,42 @@ const middleware = routerMiddleware(history);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const defaultLeague = { league: {} , error: '', loading: false };
+const defaultInvites = { invites: [], error: '', loading: false };
+
+const invitesReducer = (state = defaultInvites, action) => {
+  let copy;
+  switch(action.type){
+    case 'LOADING_INVITES':
+      copy = Object.assign({}, state);
+      copy.invites = [];
+      copy.error = '';
+      copy.loading = true;
+      return copy;
+    case 'FAILED_INVITES':
+      copy = Object.assign({}, state);
+      copy.invites = [];
+      copy.error = action.error;
+      copy.loading = false;
+      return copy;
+    case 'GOT_INVITES':
+      copy = Object.assign({}, state);
+      copy.invites = action.invites;
+      copy.error = '';
+      copy.loading = false;
+      return copy;
+    default:
+      return state;
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+const defaultLeague = {
+  league: {},
+  error: '',
+  loading: false,
+  inviteesLoading: false
+};
 
 const leagueReducer = (state = defaultLeague, action) => {
   let copy;
@@ -37,6 +72,15 @@ const leagueReducer = (state = defaultLeague, action) => {
       const leagueCopy = Object.assign({}, copy.league);
       leagueCopy.invites = action.invites;
       copy.league = leagueCopy;
+      copy.inviteesLoading = false;
+      return copy;
+    case 'INVITEES_LOADING':
+      copy = Object.assign({}, state);
+      copy.inviteesLoading = true;
+      return copy;
+    case 'INVITEES_FAILED':
+      copy = Object.assign({}, state);
+      copy.inviteesLoading = false;
       return copy;
     default:
       return state;
@@ -116,7 +160,8 @@ export const store = createStore(
     auth: authReducer,
     leagueList: leagueListReducer,
     league: leagueReducer,
-    router: routerReducer
+    router: routerReducer,
+    invites: invitesReducer
   }),
   applyMiddleware(middleware, thunk)
 );

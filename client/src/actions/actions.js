@@ -188,8 +188,17 @@ const newInvites = (invites) => ({
   invites
 });
 
+const inviteesLoading = () => ({
+  type: 'INVITEES_LOADING'
+});
+
+const inviteesFailed = () => ({
+  type: 'INVITEES_FAILED'
+});
+
 const sendInvite = (token, leagueID, invitee, errorCb) => 
   (dispatch, getState) => {
+    dispatch(inviteesLoading());
     fetch(`/leagues/invite`, {
       method: 'POST',
       body: JSON.stringify({ leagueID, invitee }),
@@ -197,11 +206,42 @@ const sendInvite = (token, leagueID, invitee, errorCb) =>
     })
       .then(resp => resp.json())
       .then(json => {
-        if(!json.success)
+        if(!json.success){
           errorCb(json.message);
+          dispatch(inviteesFailed());
+        }
         else
           dispatch(newInvites(json.invites));
       });
+};
+
+const loadingInvites = () => ({
+  type: 'LOADING_INVITES'
+});
+
+const failedInvites = (error) => ({
+  type: 'FAILED_INVITES',
+  error
+});
+
+const gotInvites = (invites) => ({
+  type: 'GOT_INVITES',
+  invites
+});
+
+const getInvites = (token, username) => (dispatch, getState) => {
+  dispatch(loadingInvites());
+  fetch(`/leagues/invites/${username}`, {
+    method: 'GET',
+    headers: getHeaders(token)
+  })
+    .then(resp => resp.json())
+    .then(json => {
+      if(!json.success)
+        dispatch(failedInvites(json.message));
+      else
+        dispatch(gotInvites(json.invites));
+    });
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +256,8 @@ const Actions = {
   newLeague,
   getLeagueList,
   getLeague,
-  sendInvite
+  sendInvite,
+  getInvites
 };
 
 export default Actions;

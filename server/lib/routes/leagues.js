@@ -97,7 +97,7 @@ LeagueRouter.get('/:leagueID', (req, res) => {
     .populate({ path: 'creator members invites', select: 'username' })
     .exec((err, league) => {
 
-      if(!league)
+      if(!league || err)
         return res.status(404).json({
           success: false,
           message: 'league not found'
@@ -130,10 +130,27 @@ LeagueRouter.get('/:leagueID', (req, res) => {
     });
 });
 
-LeagueRouter.get('/invites', (req, res) => {
-  res.status(200).json({
-    success: true
-  });
+LeagueRouter.get('/invites/:username', (req, res) => {
+  const username = req.params.username;
+
+  User
+    .findOne({ username })
+    .populate({ path: 'invites', select: 'name' })
+    .exec((err, user) => {
+
+      if(err || !user)
+        return res.status(404).json({
+          success: false,
+          message: 'user not found'
+        });
+
+      const invites = user.invites.map(({ name }) => name);
+      res.status(200).json({
+        success: true,
+        invites
+      });
+
+    });
 });
 
 LeagueRouter.post('/invite', (req, res) => {
@@ -207,7 +224,6 @@ LeagueRouter.post('/invite', (req, res) => {
                     invites: league.invites.map(({ username }) => username)
                   });
                 });
-
 
             });
 
