@@ -179,8 +179,9 @@ td.title {
 td.right {
   flex: 3; }
 
-.light-row {
-  background: #97BCBF; }
+.dark-row {
+  background: #272538;
+  color: white; }
 
 .expandable-container {
   margin: 5px;
@@ -205,7 +206,8 @@ td.right {
 
 .expandable-label.expanded {
   background: #272538;
-  color: white; }
+  color: white;
+  padding-bottom: 10px; }
 
 .expanded-content {
   flex: 1;
@@ -248,9 +250,6 @@ td.right {
   flex: 1;
   flex-flow: column;
   display: flex; }
-
-.invite-form {
-  margin: 5px; }
 
 .form-error {
   background: #F87060;

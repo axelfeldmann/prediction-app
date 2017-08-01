@@ -70,7 +70,7 @@ class LeagueView extends React.Component{
     const loading = this.props.inviteesLoading;
     const { error } = this.state;
     const outstanding = invites.map((invitee, idx) => (
-      <tr className='light-row'>
+      <tr className='dark-row'>
         <td className='title' key={ idx }>{ invitee }</td>
       </tr>
     ));
@@ -101,7 +101,7 @@ class LeagueView extends React.Component{
 
   renderMembers(){
     const members = this.props.league.members.map((m, idx) => (
-      <tr key={ idx } className='light-row m5'>
+      <tr key={ idx } className='dark-row'>
         <td className='title'>{ m }</td>
       </tr>
     ));
