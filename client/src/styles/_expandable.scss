@@ -30,8 +30,9 @@
 
 .expanded-content{
   flex: 1;
-  background: $foreground1;
   display: flex;
+  background: $background2;
+  padding: 0px 10px 10px 10px;
 }
 
 .chevron::before {

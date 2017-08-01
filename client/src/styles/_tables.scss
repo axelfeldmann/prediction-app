@@ -24,7 +24,7 @@
 }
 
 .full-list tr:hover{
-  background: $background2;
+  background: $foreground1;
   color: $light-text;
 }
 
@@ -35,4 +35,8 @@ td.title{
 
 td.right{
   flex: 3;
+}
+
+.light-row{
+  background: $background1;
 }

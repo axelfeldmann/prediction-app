@@ -46,9 +46,9 @@ class NewLeague extends React.Component{
 
   render(){
     return (
-      <div className='newleague-form'>
+      <div className='newleague-form m5'>
         { this.renderError() }
-        <div className='form-element'>
+        <div className='form-element b1'>
           <label>new league name</label>
           <input
             onChange={ this.updateName }

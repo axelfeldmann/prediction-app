@@ -1,0 +1,51 @@
+.newleague-form, .invite-form{
+  flex: 1;
+  flex-flow: column;
+  display: flex;
+}
+
+.invite-form{
+  margin: 5px;
+}
+
+.form-error{
+  background: $error-color;
+  margin: 5px;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.form-element{
+  display: flex;
+  flex-flow: row;
+  margin-bottom: 10px;
+  background: $foreground1;
+  padding: 10px;
+}
+
+.form-element label{
+  min-width: 100px;
+  text-align: center;
+}
+
+.form-element input{
+  flex: 1;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.form-submit{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-submit button{
+  background: $foreground2;
+  padding: 10px;
+  flex: 1;
+}
+
+.form-submit button:hover{
+  color: $light-text;
+}

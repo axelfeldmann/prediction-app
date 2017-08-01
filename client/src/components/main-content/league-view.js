@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Actions from '../../actions/actions';
 import Expandable from '../general/expandable';
+import isEmpty from 'lodash/isEmpty'
 
 const mapStateToProps = (state) => ({
   token: state.auth.token,
@@ -34,6 +35,7 @@ class LeagueView extends React.Component{
     this.updateInvitee = this.updateInvitee.bind(this);
     this.submit = this.submit.bind(this);
     this.errorCb = this.errorCb.bind(this);
+    this.renderMembers = this.renderMembers.bind(this);
   }
 
   componentDidMount(){
@@ -67,21 +69,48 @@ class LeagueView extends React.Component{
     const invites = this.props.league.invites;
     const loading = this.props.inviteesLoading;
     const { error } = this.state;
-    const outstanding = invites.map((invitee, idx) => (<div key={ idx }>{ invitee }</div>));
+    const outstanding = invites.map((invitee, idx) => (
+      <tr className='light-row'>
+        <td className='title' key={ idx }>{ invitee }</td>
+      </tr>
+    ));
     return (
       <div className='invite-form'>
         { error ? <div className='form-error'>{ error }</div> : null }
-        <label>invite:</label>
-        <input
-          onChange={ this.updateInvitee }
-          type='text'
-          value={ this.state.invitee }
-        />
+        <div className='form-element'>
+          <label>invite</label>
+          <input
+            onChange={ this.updateInvitee }
+            type='text'
+            value={ this.state.invitee }
+          />
+        </div>
         <div className='form-submit'>
           <button onClick={ this.submit }>create</button>
         </div>
-        { (loading) ? (<h1>loading...</h1>) : (outstanding) }
+        { (loading) ? (<h1>loading...</h1>) : (
+          <table className='full-list mt10'>
+            <tbody className='full-list-body'>
+              { outstanding }
+            </tbody>
+          </table>
+          ) }
       </div>
+    );
+  }
+
+  renderMembers(){
+    const members = this.props.league.members.map((m, idx) => (
+      <tr key={ idx } className='light-row m5'>
+        <td className='title'>{ m }</td>
+      </tr>
+    ));
+    return (
+      <table className='full-list'>
+        <tbody className='full-list-body'>
+          { members }
+        </tbody>
+      </table>
     );
   }
 
@@ -89,12 +118,13 @@ class LeagueView extends React.Component{
     const { loading, error, league, username } = this.props;
     const isCreator = ( league.creator === username);
 
-    if(loading)
+    if(loading || isEmpty(league))
       return (<h1>loading...</h1>);
 
     if(error)
       return (<h1>{ error }</h1>);
 
+    
     return (
       <div className='league-view-container'>
         <h2>{ league.name }</h2>
@@ -113,7 +143,7 @@ class LeagueView extends React.Component{
           expanded={ this.state.membersExp }
           label='League Members'
         >
-          <h1>members</h1>
+          { this.renderMembers() }
         </Expandable>
 
         <Expandable
