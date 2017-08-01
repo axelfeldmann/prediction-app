@@ -183,6 +183,17 @@ td.right {
   background: #272538;
   color: white; }
 
+.table-right-buttons {
+  display: flex;
+  flex-direction: row; }
+
+.table-button {
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 100%;
+  background: #E58270;
+  min-width: 50px; }
+
 .expandable-container {
   margin: 5px;
   border-style: solid;
@@ -253,9 +264,9 @@ td.right {
 
 .form-error {
   background: #F87060;
-  margin: 5px;
   border-radius: 5px;
-  padding: 5px; }
+  padding: 5px;
+  margin-bottom: 10px; }
 
 .form-element {
   display: flex;

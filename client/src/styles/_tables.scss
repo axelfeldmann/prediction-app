@@ -41,3 +41,16 @@ td.right{
   background: $background2;
   color: $light-text;
 }
+
+.table-right-buttons{
+  display: flex;
+  flex-direction: row;
+}
+
+.table-button{
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 100%;
+  background: $foreground2;
+  min-width: 50px;
+}

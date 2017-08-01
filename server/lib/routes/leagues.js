@@ -144,10 +144,9 @@ LeagueRouter.get('/invites/:username', (req, res) => {
           message: 'user not found'
         });
 
-      const invites = user.invites.map(({ name }) => name);
       res.status(200).json({
         success: true,
-        invites
+        invites: user.invites
       });
 
     });
