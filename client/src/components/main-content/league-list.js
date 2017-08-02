@@ -22,6 +22,14 @@ class LeagueList extends React.Component{
     this.props.getLeagueList(this.props.token);
   }
 
+  renderErrors(cLeagues, mLeagues){
+    if((cLeagues.length === 0) && (mLeagues.length === 0)){
+      return (
+        <div className='form-error'>no leagues found</div>
+      );
+    }
+  }
+
   renderLeagues(){
     const creatorLeagues = [], memberLeagues = [];
     this.props.leagues.forEach((league, idx) => {
@@ -44,6 +52,7 @@ class LeagueList extends React.Component{
 
     return (
       <div className='league-lists'>
+        { this.renderErrors(creatorLeagues, memberLeagues) }
         { (creatorLeagues.length > 0) && (
           <div className='league-list'>
             <label className='list-label'>Leagues (admin)</label>

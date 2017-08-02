@@ -15,7 +15,7 @@ LeagueRouter.post('/new', (req, res) => {
   if(!validateLeagueName(req.body.leagueName))
     return res.status(400).json({
       success: false,
-      message: 'bad league name'
+      message: 'league name must be between 4 and 32 characters'
     });
 
   const newLeague = new League({

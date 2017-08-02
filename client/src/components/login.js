@@ -46,18 +46,26 @@ class Login extends React.Component {
     } else{ //status === 'FALSE'
       return (
         <div className='auth-form'>
-          { this.state.error ? (<div className='auth-error'>{ this.state.error }</div>) : null }
+          { this.state.error ? 
+            (<div className='auth-error'>{ this.state.error }</div>) : null }
           <div className='auth-element'>
             <label>username</label>
-            <input onChange={ this.updateUsername } type='text' value={ this.state.username }/>
+            <input
+              onChange={ this.updateUsername }
+              type='text'
+              value={ this.state.username }/>
           </div>
           <div className='auth-element'>
             <label>password</label>
-            <input onChange={ this.updatePassword } type='password' value={ this.state.password }/>
+            <input
+              onChange={ this.updatePassword }
+              type='password'
+              value={ this.state.password }/>
           </div>
           <div className='auth-submit'>
             <button 
-              onClick={ login(dest, this.state.username, this.state.password, this.errorCb) }
+              onClick={ login(dest,
+                this.state.username, this.state.password, this.errorCb) }
               >
               login
             </button>
@@ -69,7 +77,9 @@ class Login extends React.Component {
 
   render(){
     const { authStatus, login, location, toHomepage, toSignup } = this.props;
-    const dest = (location && location.state) ? (location.state.from.pathname) : '/profile';
+    const dest = (location && location.state) ? (location.state.from.pathname) :
+      '/profile';
+      
     return (
       <div className='container'>
         <div className='header'>
