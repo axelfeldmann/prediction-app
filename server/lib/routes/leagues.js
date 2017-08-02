@@ -234,16 +234,68 @@ LeagueRouter.post('/invite', (req, res) => {
 
 });
 
-LeagueRouter.post('/invite/accept', (req, res) => {
-  res.status(200).json({
-    success: true
-  });
+LeagueRouter.post('/accept-invite', (req, res) => {
+
+  const leagueID = req.body.leagueID;
+  const userID = req.user._id;
+
+  League.update(
+    { _id: leagueID },
+    { $push: { members: userID }, $pull: { invites: userID } }, (err) => {
+
+      if(err) 
+        return res.status(500).json({
+          success: false, message: 'failed to update leagues'
+        });
+
+      User.update(
+        { _id: userID },
+        { $push: { leagues: leagueID }, $pull: { invites: leagueID } }, (err) => {
+
+          if(err)
+            return res.status(500).json({
+              success: false, message: 'failed to update user leagues'
+            });
+
+          return res.status(200).json({
+            success: true
+          });
+
+        }
+
+      );
+
+    });
+
 });
 
-LeagueRouter.post('/invite/reject', (req, res) => {
-  res.status(200).json({
-    success: true
+LeagueRouter.post('/reject-invite', (req, res) => {
+
+  const leagueID = req.body.leagueID;
+  const userID = req.user._id;
+
+  League.update({ _id: leagueID }, { $pull: { invites: userID } }, (err) => {
+
+    if(err)
+      return res.status(500).json({
+        success: false, message: 'failed to update leagues'
+      });
+
+    User.update({ _id: userID }, { $pull: { invites: leagueID } }, (err) => {
+
+      if(err)
+        return res.status(500).json({
+          success: false, message: 'failed to update users'
+        });
+
+      return res.status(200).json({
+        success: true
+      });
+
+    });
+
   });
+
 });
 
 module.exports = LeagueRouter;

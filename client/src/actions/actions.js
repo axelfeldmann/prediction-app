@@ -20,14 +20,12 @@ const checkAuth = (token) => (dispatch, getState) => {
     method: 'GET',
     headers: getHeaders(token)
   })
-    .then(resp => {
-      if(resp.status !== 200) throw new Error('bad auth');
-      return resp.json();
-    })
-    .then(json => dispatch(authSuccess(json.username, token)))
-    .catch(err => {
-      console.log(err);
-      dispatch(authFailed());
+    .then(resp => resp.json())
+    .then(json => {
+      if(json.success)
+        dispatch(authSuccess(json.username, token));
+      else
+        dispatch(authFailed());
     });
 };
 
@@ -248,12 +246,34 @@ const getInvites = (token, username) => (dispatch, getState) => {
 // accept/reject actions
 ////////////////////////////////////////////////////////////////////////////////
 
-const accept = (token, leagueID) => (dispatch, getState) => {
-
+const accept = (token, leagueID, errorCb) => (dispatch, getState) => {
+  fetch('leagues/accept-invite', {
+    method: 'POST',
+    body: JSON.stringify({ leagueID }),
+    headers: getHeaders(token)
+  })
+    .then(resp => resp.json())
+    .then(json => {
+      if(json.success)
+        dispatch(push(`/leagues/${leagueID}`));
+      else
+        errorCb(json.message);
+    });
 };
 
-const reject = (token, leagueID) => (dispatch, getState) => {
-
+const reject = (token, leagueID, errorCb) => (dispatch, getState) => {
+  fetch('leagues/reject-invite', {
+    method: 'POST',
+    body: JSON.stringify({ leagueID }),
+    headers: getHeaders(token)
+  })
+    .then(resp => resp.json())
+    .then(json => {
+      if(json.success)
+        dispatch(getInvites(token, getState().auth.username));
+      else
+        errorCb(json.message);
+    })
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -269,7 +289,9 @@ const Actions = {
   getLeagueList,
   getLeague,
   sendInvite,
-  getInvites
+  getInvites,
+  accept,
+  reject  
 };
 
 export default Actions;
