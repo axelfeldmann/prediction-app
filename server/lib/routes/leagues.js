@@ -1,21 +1,19 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import { validateLeagueName } from '../utils/validation';
 
 const League = mongoose.model('League');
 const User = mongoose.model('User');
 
 const LeagueRouter = new express.Router();
 
-const validateLeagueName = (name) => (
-  (typeof name === 'string') && (name.length > 4) && (name.length < 32)
-);
-
 LeagueRouter.post('/new', (req, res) => {
 
-  if(!validateLeagueName(req.body.leagueName))
+  const validationResult = validateLeagueName(req.body.leagueName);
+  if(!validationResult.success)
     return res.status(400).json({
       success: false,
-      message: 'league name must be between 4 and 32 characters'
+      message: validationResult.message
     });
 
   const newLeague = new League({
