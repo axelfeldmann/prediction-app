@@ -1,5 +1,5 @@
 .newleague-form, .invite-form{
-  flex: 1;
+  -webkit-flex: 1;
   flex-flow: column;
   display: flex;
 }
@@ -28,7 +28,7 @@
 }
 
 .form-element input{
-  flex: 1;
+  -webkit-flex: 1;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -42,7 +42,7 @@
 .form-submit button{
   background: $foreground2;
   padding: 10px;
-  flex: 1;
+  -webkit-flex: 1;
 }
 
 .form-submit button:hover{

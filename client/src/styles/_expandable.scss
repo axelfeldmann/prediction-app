@@ -30,7 +30,7 @@
 }
 
 .expanded-content{
-  flex: 1;
+  -webkit--webkit-flex: 1;
   display: flex;
   background: $background2;
   padding: 0px 10px 10px 10px;

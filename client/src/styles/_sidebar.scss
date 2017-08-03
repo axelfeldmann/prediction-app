@@ -1,7 +1,7 @@
 .sidebar{
   max-width: $sidebar-max;
   min-width: $sidebar-min;
-  flex: 1; 
+  -webkit-flex: 1; 
   background: $foreground1;
   border-right-style: solid;
   border-right-width: 5px;

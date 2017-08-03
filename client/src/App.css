@@ -34,7 +34,7 @@ button {
   min-height: 70px; }
 
 .content {
-  flex: 1;
+  -webkit-flex: 1;
   display: flex;
   flex-flow: row; }
 
@@ -57,11 +57,11 @@ button {
   margin-right: 10px; }
 
 .router {
-  flex: 1;
+  -webkit-flex: 1;
   display: flex; }
 
 .invites {
-  flex: 1;
+  -webkit-flex: 1;
   display: flex;
   flex-direction: column; }
 
@@ -109,12 +109,12 @@ button {
   flex-direction: 1; }
 
 .auth-submit button {
-  flex: 1; }
+  -webkit-flex: 1; }
 
 .sidebar {
   max-width: 200px;
   min-width: 120px;
-  flex: 1;
+  -webkit-flex: 1;
   background: #75B9BE;
   border-right-style: solid;
   border-right-width: 5px;
@@ -143,17 +143,17 @@ button {
 
 .league-lists {
   margin-top: 5px;
-  flex: 1;
+  -webkit-flex: 1;
   flex-flow: column;
   display: flex; }
 
 .league-list {
-  flex: 1;
+  -webkit-flex: 1;
   display: flex;
   flex-direction: column; }
 
 .full-list {
-  flex: 1;
+  -webkit-flex: 1;
   display: flex;
   flex-flow: column; }
 
@@ -162,7 +162,7 @@ button {
   border-bottom-width: 1px; }
 
 .full-list-body {
-  flex: 1;
+  -webkit-flex: 1;
   display: flex;
   flex-direction: column; }
 
@@ -226,7 +226,7 @@ td.right {
   padding-bottom: 10px; }
 
 .expanded-content {
-  flex: 1;
+  -webkit--webkit-flex: 1;
   display: flex;
   background: #272538;
   padding: 0px 10px 10px 10px; }
@@ -258,12 +258,12 @@ td.right {
   transform: rotate(-135deg); }
 
 .league-view-container {
-  flex: 1;
+  -webkit-flex: 1;
   display: flex;
   flex-flow: column; }
 
 .newleague-form, .invite-form {
-  flex: 1;
+  -webkit-flex: 1;
   flex-flow: column;
   display: flex; }
 
@@ -285,7 +285,7 @@ td.right {
   text-align: center; }
 
 .form-element input {
-  flex: 1;
+  -webkit-flex: 1;
   margin-left: 10px;
   margin-right: 10px; }
 
@@ -297,7 +297,7 @@ td.right {
 .form-submit button {
   background: #E58270;
   padding: 10px;
-  flex: 1; }
+  -webkit-flex: 1; }
 
 .form-submit button:hover {
   color: white; }
