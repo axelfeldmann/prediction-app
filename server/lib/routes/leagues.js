@@ -351,7 +351,7 @@ LeagueRouter.post('/remove', (req, res) => {
 
                 //this is the final success
                 return res.status(200).json({
-                  success: true
+                  success: true, message: 'successfully removed user'
                 });
 
               });

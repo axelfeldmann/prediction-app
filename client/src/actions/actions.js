@@ -277,6 +277,26 @@ const reject = (token, leagueID, errorCb) => (dispatch, getState) => {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+// remove action
+////////////////////////////////////////////////////////////////////////////////
+
+const remove = (token, leagueID, target, successCb, errorCb) =>
+  (dispatch, getState) => {
+    fetch('leagues/remove', {
+      method: 'POST',
+      body: JSON.stringify({ leagueID, target }),
+      headers: getHeaders(token)
+    })
+      .then(resp => resp.json())
+      .then(json => {
+        if(json.success)
+          successCb(json.message);
+        else
+          errorCb(json.message);
+      });
+};
+
+////////////////////////////////////////////////////////////////////////////////
 // export actions
 ////////////////////////////////////////////////////////////////////////////////
 
