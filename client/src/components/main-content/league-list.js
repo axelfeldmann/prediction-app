@@ -14,8 +14,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getLeagueList: (token) => dispatch(Actions.getLeagueList(token)),
   pushID: (id) => () => dispatch(push(`/leagues/${id}`)),
-  remove: (token, leagueID, target, errorCb, successCb) =>
-    dispatch(Actions.remove(token, leagueID, target, errorCb, successCb))
+  remove: (token, leagueID, target, successCb) =>
+    dispatch(Actions.remove(token, leagueID, target, successCb))
 });
 
 class LeagueList extends React.Component{
@@ -39,9 +39,7 @@ class LeagueList extends React.Component{
 
   leave(leagueID){
     const { remove, token, username, getLeagueList } = this.props;
-    remove(token, leagueID, username, 
-      (m) => console.log(m),
-      () => getLeagueList(token));
+    remove(token, leagueID, username, () => getLeagueList(token));
   }
 
   renderLeagues(){
@@ -67,7 +65,7 @@ class LeagueList extends React.Component{
             <td className='table-right-buttons'>
               <button
                 className='table-button'
-                onClick={ this.leave(league._id) }>
+                onClick={ () => this.leave(league._id) }>
                 leave
               </button>
             </td>

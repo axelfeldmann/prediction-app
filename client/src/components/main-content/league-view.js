@@ -16,7 +16,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getLeague: (token, leagueID) => dispatch(Actions.getLeague(token, leagueID)),
   sendInvite: (token, leagueID, invitee, errorCb) =>
-    dispatch(Actions.sendInvite(token, leagueID, invitee, errorCb))
+    dispatch(Actions.sendInvite(token, leagueID, invitee, errorCb)),
+  remove: (token, leagueID, target, successCb) =>
+    dispatch(Actions.remove(token, leagueID, target, successCb))
 });
 
 class LeagueView extends React.Component{
@@ -36,6 +38,12 @@ class LeagueView extends React.Component{
     this.submit = this.submit.bind(this);
     this.errorCb = this.errorCb.bind(this);
     this.renderMembers = this.renderMembers.bind(this);
+    this.remove = this.remove.bind(this);
+  }
+
+  remove(target){
+    const { league, remove, token, getLeague } = this.props;
+    remove(token, league._id, target, () => getLeague(token, league._id));
   }
 
   componentDidMount(){
@@ -72,6 +80,13 @@ class LeagueView extends React.Component{
     const outstanding = invites.map((invitee, idx) => (
       <tr className='dark-row' key= { idx }>
         <td className='title'>{ invitee }</td>
+        <td className='table-right-buttons'>
+          <button
+            className='table-button'
+            onClick={ () => this.remove(invitee) }>
+            uninvite
+          </button>
+        </td>
       </tr>
     ));
     return (
@@ -100,9 +115,20 @@ class LeagueView extends React.Component{
   }
 
   renderMembers(){
+    const { creator } = this.props.league;
+    const { username } = this.props;
     const members = this.props.league.members.map((m, idx) => (
       <tr key={ idx } className='dark-row'>
         <td className='title'>{ m }</td>
+        { (creator !== m && creator === username) && 
+        <td className='table-right-buttons'>
+          <button
+            className='table-button'
+            onClick={ () => this.remove(m) }>
+            remove
+          </button>
+        </td>
+        }
       </tr>
     ));
     return (

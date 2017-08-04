@@ -280,9 +280,9 @@ const reject = (token, leagueID, errorCb) => (dispatch, getState) => {
 // remove action
 ////////////////////////////////////////////////////////////////////////////////
 
-const remove = (token, leagueID, target, errorCb, successCb) =>
+const remove = (token, leagueID, target, successCb) =>
   (dispatch, getState) => {
-    fetch('leagues/remove', {
+    fetch('/leagues/remove', {
       method: 'POST',
       body: JSON.stringify({ leagueID, target }),
       headers: getHeaders(token)
@@ -291,8 +291,8 @@ const remove = (token, leagueID, target, errorCb, successCb) =>
       .then(json => {
         if(json.success)
           successCb(json.message);
-        else
-          errorCb(json.message);
+        else //TODO BETTER ERROR HANDLING
+          console.log(json.message)
       });
 };
 

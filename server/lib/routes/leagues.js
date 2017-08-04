@@ -322,7 +322,8 @@ LeagueRouter.post('/remove', (req, res) => {
 
         //only allow creator or user themselves to perform remove
         const isAllowed = ((targetName === removerName) || 
-          (league.creator.username === removerName));
+          (league.creator.username === removerName)) && 
+          (target._id != league.creator._id);
 
         const targetID = target._id;
 
