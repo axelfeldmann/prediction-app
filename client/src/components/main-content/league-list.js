@@ -13,10 +13,17 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getLeagueList: (token) => dispatch(Actions.getLeagueList(token)),
-  push: (id) => () => dispatch(push(`/leagues/${id}`))
+  pushID: (id) => () => dispatch(push(`/leagues/${id}`)),
+  remove: (token, leagueID, target, errorCb, successCb) =>
+    dispatch(Actions.remove(token, leagueID, target, errorCb, successCb))
 });
 
 class LeagueList extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.leave = this.leave.bind(this);
+  }
 
   componentDidMount(){
     this.props.getLeagueList(this.props.token);
@@ -30,21 +37,40 @@ class LeagueList extends React.Component{
     }
   }
 
+  leave(leagueID){
+    const { remove, token, username, getLeagueList } = this.props;
+    remove(token, leagueID, username, 
+      (m) => console.log(m),
+      () => getLeagueList(token));
+  }
+
   renderLeagues(){
     const creatorLeagues = [], memberLeagues = [];
+
     this.props.leagues.forEach((league, idx) => {
       if(league.creator === this.props.username){
         creatorLeagues.push(
-          <tr key={ idx } onClick={ this.props.push(league._id) }>
+          <tr key={ idx } onClick={ this.props.pushID(league._id) }>
             <td className='title'>{ league.name }</td>
             <td className='right'>{ league.creator }</td>
           </tr>
         );
       } else {
         memberLeagues.push(
-          <tr key={ idx } onClick={ this.props.push(league._id) }>
-            <td className='title'>{ league.name }</td>
-            <td className='right'>{ league.creator }</td>
+          <tr key={ idx }>
+            <td className='title' onClick={ this.props.pushID(league._id) }>
+              { league.name }
+            </td>
+            <td className='right' onClick={ this.props.pushID(league._id) }>
+              { league.creator }
+            </td>
+            <td className='table-right-buttons'>
+              <button
+                className='table-button'
+                onClick={ this.leave(league._id) }>
+                leave
+              </button>
+            </td>
           </tr>
         );
       }

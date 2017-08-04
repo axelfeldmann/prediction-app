@@ -280,7 +280,7 @@ const reject = (token, leagueID, errorCb) => (dispatch, getState) => {
 // remove action
 ////////////////////////////////////////////////////////////////////////////////
 
-const remove = (token, leagueID, target, successCb, errorCb) =>
+const remove = (token, leagueID, target, errorCb, successCb) =>
   (dispatch, getState) => {
     fetch('leagues/remove', {
       method: 'POST',
@@ -311,7 +311,8 @@ const Actions = {
   sendInvite,
   getInvites,
   accept,
-  reject  
+  reject,
+  remove
 };
 
 export default Actions;
