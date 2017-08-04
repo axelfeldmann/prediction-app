@@ -296,4 +296,73 @@ LeagueRouter.post('/reject-invite', (req, res) => {
 
 });
 
+
+LeagueRouter.post('/remove', (req, res) => {
+
+  const leagueID = req.body.leagueID;
+  const targetName = req.body.target;
+  const removerName = req.user.username;
+
+  User.findOne({ username: targetName }, '_id', (err, target) => {
+
+    if(err)
+      return res.status(404).json({
+        success: false, message: 'could not find user to be removed'
+      });
+
+    League
+      .findOne({ _id: leagueID })
+      .populate({ path: 'creator', select: 'username _id'})
+      .exec((err, league) => {
+
+        if(err)
+          return res.status(404).json({
+            success: false, message: 'could not find league'
+          });
+
+        //only allow creator or user themselves to perform remove
+        const isAllowed = ((targetName === removerName) || 
+          (league.creator.username === removerName));
+
+        const targetID = target._id;
+
+        if(!isAllowed)
+          return res.status(401).json({
+            success: false, message: 'permission denied to remove this user'
+          });
+
+        //remove user from leagues
+        League.update({ _id: leagueID },
+          { $pull: { invites: targetID, members: targetID } }, (err) => {
+
+            if(err)
+              return res.status(500).json({
+                success: false, message: 'could not remove user from league'
+              });
+
+            //remove league from user
+            User.update({ _id: targetID },
+              { $pull: { invites: leagueID, leagues: leagueID } }, (err) => {
+
+                if(err)
+                  return res.status(500).json({
+                    success: false, message: 'user removal incomplete'
+                  });
+
+                //this is the final success
+                return res.status(200).json({
+                  success: true
+                });
+
+              });
+
+          });
+
+      });
+
+  });
+
+});
+
+
 module.exports = LeagueRouter;

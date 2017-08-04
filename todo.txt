@@ -1,0 +1,7 @@
+-add validation to frontend
+-centralize error state?
+-allow leaving/kicking/uninviting from leagues
+
+-actually think through predictions!!!
+-remove case sensitivity from usernames?
+
