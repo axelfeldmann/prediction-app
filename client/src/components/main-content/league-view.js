@@ -150,7 +150,6 @@ class LeagueView extends React.Component{
     if(error)
       return (<h1>{ error }</h1>);
 
-    
     return (
       <div className='league-view-container'>
         <h2>{ league.name }</h2>

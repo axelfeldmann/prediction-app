@@ -14,16 +14,22 @@ const getHeaders = (token) => {
 // check authentication
 ////////////////////////////////////////////////////////////////////////////////
 
-const checkAuth = (token) => (dispatch, getState) => {
+const checkAuth = (token) => (dispatch) => {
+  console.log('hi');
   dispatch(authLoading());
   fetch('/user/check', {
     method: 'GET',
     headers: getHeaders(token)
   })
-    .then(resp => resp.json())
-    .then(json => {
-      if(json.success)
-        dispatch(authSuccess(json.username, token));
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object')
+        dispatch(authSuccess(parsed.username, token));
       else
         dispatch(authFailed());
     });
@@ -47,20 +53,25 @@ const authLoading = () => ({
 // login actions
 ////////////////////////////////////////////////////////////////////////////////
 
-const login = (to, username, password, errorCb) => (dispatch, getState) => {
+const login = (to, username, password, errorCb) => (dispatch) => {
   fetch('/auth/login', {
     method: 'POST',
     body: JSON.stringify({ username, password }),
     headers: getHeaders()
   })
-    .then(resp => resp.json())
-    .then(json => {
-      if(json.success){
-        window.localStorage.setItem('token', json.token);
-        dispatch(authSuccess(json.user.username, json.token));
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object'){
+        window.localStorage.setItem('token', parsed.token);
+        dispatch(authSuccess(parsed.user.username, parsed.token));
         dispatch(push('/profile'));
       } else {
-        errorCb(json.message);
+        errorCb(parsed);
       }
     });
 };
@@ -75,19 +86,23 @@ const logout = () => {
 ////////////////////////////////////////////////////////////////////////////////
 
 const signup = (username, password, confirm, errorCb) => 
-  (dispatch, getState) => {
+  (dispatch) => {
   fetch('/auth/signup', {
     method: 'POST',
     body: JSON.stringify({ username, password, confirm }),
     headers: getHeaders()
   })
-    .then(resp => resp.json())
-    .then(json => {
-      if(json.success){
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object')
         dispatch(push('/login'));
-      } else {
-        errorCb(json.message);
-      }
+      else
+        errorCb(parsed);
     });
 };
 
@@ -95,17 +110,23 @@ const signup = (username, password, confirm, errorCb) =>
 // new league action
 ////////////////////////////////////////////////////////////////////////////////
 
-const newLeague = (token, leagueName, errorCb) => (dispatch, getState) => {
+const newLeague = (token, leagueName, errorCb) => (dispatch) => {
   fetch('/leagues/new', {
     method: 'POST',
     body: JSON.stringify({ leagueName }),
     headers: getHeaders(token)
   })
-    .then(resp => resp.json())
-    .then(json => {
-      if(json.success)
-        return dispatch(push('/leagues'));
-      errorCb(json.message);
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object')
+        dispatch(push('/leagues'));
+      else
+        errorCb(parsed);
     });
 };
 
@@ -127,19 +148,23 @@ const gotLeagueList = (leagues) => ({
   leagues
 });
 
-const getLeagueList = (token) => (dispatch, getState) => {
+const getLeagueList = (token) => (dispatch) => {
   dispatch(loadingLeagueList());
   fetch('/leagues/', {
     method: 'GET',
     headers: getHeaders(token)
   })
-    .then(resp => resp.json())
-    .then(json => {
-      if(json.success){
-        dispatch(gotLeagueList(json.leagues));
-      } else {
-        dispatch(leagueListFailed(json.message));
-      }
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object')
+        dispatch(gotLeagueList(parsed.leagues));
+      else
+        dispatch(leagueListFailed(parsed));
     });
 };
 
@@ -161,19 +186,23 @@ const gotLeague = (league) => ({
   league
 });
 
-const getLeague = (token, leagueID) => (dispatch, getState) => {
+const getLeague = (token, leagueID) => (dispatch) => {
   dispatch(loadingLeague());
   fetch(`/leagues/${leagueID}`, {
     method: 'GET',
     headers: getHeaders(token)
   })
-    .then(resp => resp.json())
-    .then(json => {
-      if(json.success){
-        dispatch(gotLeague(json.league));
-      } else {
-        dispatch(leagueFailed(json.message));
-      }
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object')
+        dispatch(gotLeague(parsed.league));
+      else
+        dispatch(leagueFailed(parsed));
     });
 };
 
@@ -190,27 +219,30 @@ const inviteesLoading = () => ({
   type: 'INVITEES_LOADING'
 });
 
-const inviteesFailed = () => ({
-  type: 'INVITEES_FAILED'
+const inviteesFailed = (error) => ({
+  type: 'INVITEES_FAILED',
+  error
 });
 
-const sendInvite = (token, leagueID, invitee, errorCb) => 
-  (dispatch, getState) => {
-    dispatch(inviteesLoading());
-    fetch(`/leagues/invite`, {
-      method: 'POST',
-      body: JSON.stringify({ leagueID, invitee }),
-      headers: getHeaders(token)
+const sendInvite = (token, leagueID, invitee, errorCb) => (dispatch) => {
+  dispatch(inviteesLoading());
+  fetch(`/leagues/invite`, {
+    method: 'POST',
+    body: JSON.stringify({ leagueID, invitee }),
+    headers: getHeaders(token)
+  })
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
     })
-      .then(resp => resp.json())
-      .then(json => {
-        if(!json.success){
-          errorCb(json.message);
-          dispatch(inviteesFailed());
-        }
-        else
-          dispatch(newInvites(json.invites));
-      });
+    .then(parsed => {
+      if(typeof parsed === 'object')
+        dispatch(newInvites(parsed.invites));
+      else
+        dispatch(inviteesFailed(parsed));
+    });
 };
 
 const loadingInvites = () => ({
@@ -227,18 +259,23 @@ const gotInvites = (invites) => ({
   invites
 });
 
-const getInvites = (token, username) => (dispatch, getState) => {
+const getInvites = (token, username) => (dispatch) => {
   dispatch(loadingInvites());
   fetch(`/leagues/invites/${username}`, {
     method: 'GET',
     headers: getHeaders(token)
   })
-    .then(resp => resp.json())
-    .then(json => {
-      if(!json.success)
-        dispatch(failedInvites(json.message));
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
       else
-        dispatch(gotInvites(json.invites));
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object')
+        dispatch(gotInvites(parsed.invites));
+      else
+        dispatch(failedInvites(parsed));
     });
 };
 
@@ -246,54 +283,75 @@ const getInvites = (token, username) => (dispatch, getState) => {
 // accept/reject actions
 ////////////////////////////////////////////////////////////////////////////////
 
-const accept = (token, leagueID, errorCb) => (dispatch, getState) => {
+const invitesError = (error) => ({
+  type: 'INVITES_ERROR',
+  error
+});
+
+const accept = (token, leagueID) => (dispatch) => {
+  dispatch(invitesError(''));
   fetch('leagues/accept-invite', {
     method: 'POST',
     body: JSON.stringify({ leagueID }),
     headers: getHeaders(token)
   })
-    .then(resp => resp.json())
-    .then(json => {
-      if(json.success)
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object')
         dispatch(push(`/leagues/${leagueID}`));
       else
-        errorCb(json.message);
+        dispatch(invitesError(parsed));
     });
 };
 
 const reject = (token, leagueID, errorCb) => (dispatch, getState) => {
+  dispatch(invitesError(''));
   fetch('leagues/reject-invite', {
     method: 'POST',
     body: JSON.stringify({ leagueID }),
     headers: getHeaders(token)
   })
-    .then(resp => resp.json())
-    .then(json => {
-      if(json.success)
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object')
         dispatch(getInvites(token, getState().auth.username));
       else
-        errorCb(json.message);
-    })
+        dispatch(invitesError(parsed));
+    });
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // remove action
 ////////////////////////////////////////////////////////////////////////////////
 
-const remove = (token, leagueID, target, successCb) =>
-  (dispatch, getState) => {
-    fetch('/leagues/remove', {
-      method: 'POST',
-      body: JSON.stringify({ leagueID, target }),
-      headers: getHeaders(token)
+const remove = (token, leagueID, target, successCb) => (dispatch) => {
+  fetch('/leagues/remove', {
+    method: 'POST',
+    body: JSON.stringify({ leagueID, target }),
+    headers: getHeaders(token)
+  })
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
     })
-      .then(resp => resp.json())
-      .then(json => {
-        if(json.success)
-          successCb(json.message);
-        else //TODO BETTER ERROR HANDLING
-          console.log(json.message)
-      });
+    .then(parsed => {
+      if(typeof parsed === 'object')
+        successCb(parsed.message);
+      else //TODO BETTER ERROR HANDLING
+        console.log(parsed)
+    });
 };
 
 ////////////////////////////////////////////////////////////////////////////////

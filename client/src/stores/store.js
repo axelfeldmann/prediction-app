@@ -26,6 +26,10 @@ const invitesReducer = (state = defaultInvites, action) => {
       copy.error = action.error;
       copy.loading = false;
       return copy;
+    case 'INVITES_ERROR':
+      copy = Object.assign({}, state);
+      copy.loading = false;
+      return copy;
     case 'GOT_INVITES':
       copy = Object.assign({}, state);
       copy.invites = action.invites;

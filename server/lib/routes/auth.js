@@ -9,10 +9,7 @@ AuthRouter.post('/signup', (req, res, next) => {
 
   const validationResult = validateSignup(req.body);
   if(!validationResult.success){
-    return res.status(400).json({
-      success: false,
-      message: validationResult.message
-    });
+    return res.status(400).send(validationResult.message);
   }
 
   return passport.authenticate('local-signup', (err) => {
@@ -20,20 +17,13 @@ AuthRouter.post('/signup', (req, res, next) => {
       if (err.name === 'duplicate') {
         // the 11000 Mongo code is for a duplication email error
         // the 409 HTTP status code is for conflict error
-        return res.status(409).json({
-          success: false,
-          message: 'Username taken. Be more creative.'
-        });
+        return res.status(409).send('duplicate username, be more creative');
       }
 
-      return res.status(400).json({
-        success: false,
-        message: 'Could not process the form.'
-      });
+      return res.status(400).send('could not process form');
     }
 
     return res.status(200).json({
-      success: true,
       message: 'You have successfully signed up!'
     });
   })(req, res, next);
@@ -46,28 +36,18 @@ AuthRouter.post('/login', (req, res, next) => {
 
     const validationResult = validateLogin(req.body);
     if(!validationResult.success){
-      return res.status(400).json({
-        success: false,
-        message: validationResult.message
-      });
+      return res.status(400).send(validationResult.message);
     }
-
 
     if (err) {
       if (err.name === 'IncorrectCredentialsError') {
-        return res.status(400).json({
-          success: false,
-          message: err.message
-        });
+        return res.status(400).send(err.message);
       }
+      
+      return res.status(400).send('could not process form');
 
-      return res.status(400).json({
-        success: false,
-        message: 'Could not process the form.'
-      });
     }
     return res.json({
-      success: true,
       message: 'You have successfully logged in!',
       token,
       user: userData

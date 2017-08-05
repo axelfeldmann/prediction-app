@@ -11,10 +11,7 @@ LeagueRouter.post('/new', (req, res) => {
 
   const validationResult = validateLeagueName(req.body.leagueName);
   if(!validationResult.success)
-    return res.status(400).json({
-      success: false,
-      message: validationResult.message
-    });
+    return res.status(400).send(validationResult.message);
 
   const newLeague = new League({
     name: req.body.leagueName,
@@ -27,15 +24,9 @@ LeagueRouter.post('/new', (req, res) => {
     if(err){
 
       if(err.code === 11000)
-        return res.status(400).json({
-          success: false,
-          message: 'league name already taken - be more creative'
-        })
+        return res.status(400).send('league name taken - be more creative');
 
-      res.status(500).json({
-        success: false,
-        message: 'error - could not create new league'
-      });
+      return res.status(500).send('could not create league');
 
     } else {
       User.update(
@@ -43,18 +34,15 @@ LeagueRouter.post('/new', (req, res) => {
         { $push: { leagues: newLeague._id } },
         (err) => {
           if(err)
-            res.status(500).json({
-              success: false,
-              message: 'error - could not initialize new league'
-            });
+            res.status(500).send('could not initialize new league');
           else 
-            res.status(200).json({
-              success: true
-            });
+            res.status(200).json({ });
       });
 
     }
+
   });
+
 });
 
 LeagueRouter.get('/', (req, res) => {
@@ -66,10 +54,7 @@ LeagueRouter.get('/', (req, res) => {
     .exec((err, user) => {
       if(err){
 
-        res.status(500).json({
-          success: false,
-          message: 'error- could not get leagues'
-        });
+        res.status(500).send('could not get leagues');
 
       } else {
         
@@ -78,7 +63,6 @@ LeagueRouter.get('/', (req, res) => {
         }));
 
         res.status(200).json({
-          success: true,
           leagues
         });
 
@@ -96,18 +80,12 @@ LeagueRouter.get('/:leagueID', (req, res) => {
     .exec((err, league) => {
 
       if(!league || err)
-        return res.status(404).json({
-          success: false,
-          message: 'league not found'
-        });
+        return res.status(404).send('league not found');
 
       const members = league.members.map((m) => m.username);
 
       if(!members.includes(req.user.username))
-        return res.status(401).json({
-          success: false,
-          message: 'you are not a member of this league'
-        });
+        return res.status(401).send('you are not a member of this league');
 
       const leagueObj = {
         _id: league._id,
@@ -121,7 +99,6 @@ LeagueRouter.get('/:leagueID', (req, res) => {
       }
 
       res.status(200).json({
-        success: true,
         league: leagueObj
       });
 
@@ -137,13 +114,9 @@ LeagueRouter.get('/invites/:username', (req, res) => {
     .exec((err, user) => {
 
       if(err || !user)
-        return res.status(404).json({
-          success: false,
-          message: 'user not found'
-        });
+        return res.status(404).send('user not found');
 
       res.status(200).json({
-        success: true,
         invites: user.invites
       });
 
@@ -160,66 +133,52 @@ LeagueRouter.post('/invite', (req, res) => {
     .exec((err, league) => {
 
       if(err)
-        return res.status(500).json({
-          success: false, message: 'not your fault, but your loss'
-        });
+        return res.status(500).send('not your fault, but your loss');
 
       if(!league)
-        return res.status(404).json({
-          success: false, message: 'league not found'
-        });
+        return res.status(404).send('league not found');
 
       if(league.creator.username !== req.user.username)
-        return res.status(401).json({
-          success: false, message: 'you cant invite to this league, you clown'
-        });
+        return res.status(401).send('you cant invite to this league, clown');
 
       const members = league.members.map((m) => m.username);
       if(members.includes(req.body.invitee))
-        return res.status(400).json({
-          success: false, message: `${req.body.invitee} is already a member`
-        });
+        return res.status(400).send(`${req.body.invitee} is already a member`);
 
       const invites = league.invites.map((i) => i.username);
       if(invites.includes(req.body.invitee))
-        return res.status(400).json({
-          success: false, message: `${req.body.invitee} is already invited`
-        });
+        return res.status(400).send(`${req.body.invitee} is already invited`);
 
       User.findOne({ username: req.body.invitee }, 
         'invites _id', (err, user) => {
           
           if(err)
-            return res.status(500).json({
-              success: false, message: 'get user error, your loss'
-            });
+            return res.status(500).send('get user error, your loss');
 
           if(!user)
-            return res.status(400).json({
-              success: false, message: 'user not found'
-            });
+            return res.status(400).send('user not found');
 
           User.update({ _id: user._id }, { $push: { invites: leagueID } }, (err) => {
 
             if(err)
-              return res.status(500).json({ success: false, message: 'user update failed' });
+              return res.status(500).send('user update failed');
 
             League.update({ _id: leagueID }, { $push: { invites: user._id } }, (err) => {
 
               if(err)
-                return res.status(500).json({ success: false, message: 'league update failed' });
+                return res.status(500).send('league update failed');
 
               League
                 .findOne({ _id: leagueID })
                 .populate({ path: 'invites', select: 'username' })
                 .exec((err, league) => {
                   if(err)
-                    res.status(500).json({ success: false, message: 'failed to recover invites' });
+                    res.status(500).send('failed to recover invites');
 
                   res.status(200).json({
-                    success: true,
                     invites: league.invites.map(({ username }) => username)
                   });
+
                 });
 
             });
@@ -242,22 +201,16 @@ LeagueRouter.post('/accept-invite', (req, res) => {
     { $push: { members: userID }, $pull: { invites: userID } }, (err) => {
 
       if(err) 
-        return res.status(500).json({
-          success: false, message: 'failed to update leagues'
-        });
+        return res.status(500).send('failed to update league');
 
       User.update(
         { _id: userID },
         { $push: { leagues: leagueID }, $pull: { invites: leagueID } }, (err) => {
 
           if(err)
-            return res.status(500).json({
-              success: false, message: 'failed to update user leagues'
-            });
+            return res.status(500).send('failed to update user leagues');
 
-          return res.status(200).json({
-            success: true
-          });
+          return res.status(200).json({ });
 
         }
 
@@ -275,20 +228,14 @@ LeagueRouter.post('/reject-invite', (req, res) => {
   League.update({ _id: leagueID }, { $pull: { invites: userID } }, (err) => {
 
     if(err)
-      return res.status(500).json({
-        success: false, message: 'failed to update leagues'
-      });
+      return res.status(500).send('failed to update leagues');
 
     User.update({ _id: userID }, { $pull: { invites: leagueID } }, (err) => {
 
       if(err)
-        return res.status(500).json({
-          success: false, message: 'failed to update users'
-        });
+        return res.status(500).send('failed to update users');
 
-      return res.status(200).json({
-        success: true
-      });
+      return res.status(200).json({ });
 
     });
 
@@ -306,9 +253,7 @@ LeagueRouter.post('/remove', (req, res) => {
   User.findOne({ username: targetName }, '_id', (err, target) => {
 
     if(err)
-      return res.status(404).json({
-        success: false, message: 'could not find user to be removed'
-      });
+      return res.status(404).send('could not find target user');
 
     League
       .findOne({ _id: leagueID })
@@ -316,9 +261,7 @@ LeagueRouter.post('/remove', (req, res) => {
       .exec((err, league) => {
 
         if(err)
-          return res.status(404).json({
-            success: false, message: 'could not find league'
-          });
+          return res.status(404).send('could not find league');
 
         //only allow creator or user themselves to perform remove
         const isAllowed = ((targetName === removerName) || 
@@ -328,31 +271,25 @@ LeagueRouter.post('/remove', (req, res) => {
         const targetID = target._id;
 
         if(!isAllowed)
-          return res.status(401).json({
-            success: false, message: 'permission denied to remove this user'
-          });
+          return res.status(401).send('permission denied to remove user');
 
         //remove user from leagues
         League.update({ _id: leagueID },
           { $pull: { invites: targetID, members: targetID } }, (err) => {
 
             if(err)
-              return res.status(500).json({
-                success: false, message: 'could not remove user from league'
-              });
+              return res.status(500).send('could not remove user from league');
 
             //remove league from user
             User.update({ _id: targetID },
               { $pull: { invites: leagueID, leagues: leagueID } }, (err) => {
 
                 if(err)
-                  return res.status(500).json({
-                    success: false, message: 'user removal incomplete'
-                  });
+                  return res.status(500).send('user removal incomplete');
 
                 //this is the final success
                 return res.status(200).json({
-                  success: true, message: 'successfully removed user'
+                  message: 'successfully removed user'
                 });
 
               });
