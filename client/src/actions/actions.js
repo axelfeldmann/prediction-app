@@ -15,7 +15,6 @@ const getHeaders = (token) => {
 ////////////////////////////////////////////////////////////////////////////////
 
 const checkAuth = (token) => (dispatch) => {
-  console.log('hi');
   dispatch(authLoading());
   fetch('/user/check', {
     method: 'GET',

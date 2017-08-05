@@ -141,6 +141,7 @@ class LeagueView extends React.Component{
   }
 
   render(){
+    console.log(this.props.error);
     const { loading, error, league, username } = this.props;
     const isCreator = ( league.creator === username);
 
