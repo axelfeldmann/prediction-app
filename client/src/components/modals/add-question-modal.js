@@ -9,7 +9,7 @@ class AddQuestionModal extends React.Component{
       <Modal isOpen={ isOpen } contentLabel='add question'>
         <div className='add-question-modal'>
           <h1>modal</h1>
-          <button onClick={ closeFn }>x</button>
+          <button onClick={ closeFn } className='close-modal'>close</button>
         </div>
       </Modal>
     );

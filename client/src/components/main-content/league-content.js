@@ -33,7 +33,9 @@ class LeagueContent extends React.Component{
     return (
       <div className='league-content'>
         { this.renderModal() }
-        <button onClick={ this.openModal } className='plus-button'>+</button>
+        <button onClick={ this.openModal } className='add-button'>
+          add question
+        </button>
       </div>
     );
   }

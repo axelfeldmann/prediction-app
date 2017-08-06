@@ -73,6 +73,7 @@ button{
 $modal-margin: 30px;
 
 .ReactModal__Content{
+  border-radius: 5px !important;
   padding: 0px !important;
   top: $modal-margin !important;
   bottom: $modal-margin !important;
