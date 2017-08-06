@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Actions from '../../actions/actions';
 import Expandable from '../general/expandable';
+import LeagueContent from './league-content.js';
 
 const mapStateToProps = (state) => ({
   token: state.auth.token,
@@ -132,8 +133,8 @@ class LeagueView extends React.Component{
           label='Invites'
         >
           <div className='invite-form'>
-            <div className='form-element'>
-              <label>invite</label>
+            <div className='form-element dark'>
+              <label>username</label>
               <input
                 onChange={ this.updateInvitee }
                 type='text'
@@ -179,11 +180,9 @@ class LeagueView extends React.Component{
             </tbody>
           </table>
         );
-
       } else {
         content = (<h1>loading...</h1>);
       }
-
       return(
         <Expandable
           toggleFn={ this.toggleFn('membersExp') }
@@ -201,11 +200,7 @@ class LeagueView extends React.Component{
   renderContent(){
     const { league } = this.props;
     if(league)
-      return (
-        <div className='league-content'>
-          content
-        </div>
-      );
+      return ( <LeagueContent/> );
     else
       return null; 
   }

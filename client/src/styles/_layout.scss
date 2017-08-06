@@ -1,9 +1,11 @@
 body, html{
   background: $background1;
   color: $dark-text;
+  overflow: hidden;
 }
 
 button{
+  border-radius: 5px;
   background: $foreground1;
   border: 0;
   color: $dark-text;
@@ -62,4 +64,18 @@ button{
   -webkit-flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.ReactModal__Overlay{
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+$modal-margin: 30px;
+
+.ReactModal__Content{
+  padding: 0px !important;
+  top: $modal-margin !important;
+  bottom: $modal-margin !important;
+  left: $modal-margin !important;
+  right: $modal-margin !important;
 }

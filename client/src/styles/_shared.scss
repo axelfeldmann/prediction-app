@@ -27,3 +27,8 @@ $sidebar-min: 120px;
   border-width: 1px;
   border-color: $background2;
 }
+
+.dark{
+  background: $background2 !important;
+  color: $light-text;
+}
