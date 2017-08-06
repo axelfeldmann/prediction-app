@@ -8,42 +8,49 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
   league: state.league.league,
   error: state.league.error,
-  loading: state.league.loading,
   username: state.auth.username,
-  inviteesLoading: state.league.inviteesLoading
+  membersLoading: state.league.membersLoading,
+  invitesLoading: state.league.invitesLoading,
+  loading: state.league.loading
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getLeague: (token, leagueID) => dispatch(Actions.getLeague(token, leagueID)),
   sendInvite: (token, leagueID, invitee, errorCb) =>
     dispatch(Actions.sendInvite(token, leagueID, invitee, errorCb)),
-  remove: (token, leagueID, target, successCb) =>
-    dispatch(Actions.remove(token, leagueID, target, successCb))
+  setError: (error) => dispatch(Actions.gotLeagueError(error)),
+  uninvite: (token, leagueID, target) => dispatch(Actions.uninvite(token, leagueID, target)),
+  kick: (token, leagueID, target) => dispatch(Actions.kick(token, leagueID, target))
 });
 
 class LeagueView extends React.Component{
 
   constructor(){
     super();
+
     this.state = {
       membersExp: false,
       inviteExp: false,
       contentExp: false,
-      error: '',
       invitee: ''
     };
+
     this.toggleFn = this.toggleFn.bind(this);
     this.renderInvites = this.renderInvites.bind(this);
     this.updateInvitee = this.updateInvitee.bind(this);
     this.submit = this.submit.bind(this);
-    this.errorCb = this.errorCb.bind(this);
+
     this.renderMembers = this.renderMembers.bind(this);
-    this.remove = this.remove.bind(this);
   }
 
-  remove(target){
-    const { league, remove, token, getLeague } = this.props;
-    remove(token, league._id, target, () => getLeague(token, league._id));
+  kick(target){
+    const { league, kick, token } = this.props;
+    kick(token, league._id, target);
+  }
+
+  uninvite(target){
+    const { league, uninvite, token } = this.props;
+    uninvite(token, league._id, target);
   }
 
   componentDidMount(){
@@ -51,8 +58,10 @@ class LeagueView extends React.Component{
   }
 
   toggleFn(field){
+    const { setError } = this.props;
     return () => {
-      const update = { error: '' };
+      setError('');
+      const update = {};
       update[field] = !this.state[field];
       this.setState(update);
     };
@@ -62,116 +71,137 @@ class LeagueView extends React.Component{
     this.setState({ invitee: event.target.value });
   }
 
-  errorCb(message){
-    this.setState({ error: message });
-  }
-
   submit(){
-    const { token, league, sendInvite } = this.props;
+    const { token, league, sendInvite, setError } = this.props;
     const { invitee } = this.state;
-    this.setState({ error: '', invitee: '' });
+    this.setState({ invitee: '' });
     sendInvite(token, league._id, invitee, this.errorCb);
   }
 
+  renderError(){
+    const { error } = this.props;
+    if(error)
+      return (<div className='form-error'>{ error }</div>);
+    else
+      return null;
+  }
+
+  renderTitle(){
+    const { league, loading } = this.props;
+    if(league)
+      return (<h2>{ league.name }</h2>);
+    else if(loading)
+      return (<h2>loading...</h2>);
+    return null;
+  }
+
   renderInvites(){
-    const invites = this.props.league.invites;
-    const loading = this.props.inviteesLoading;
-    const { error } = this.state;
-    const outstanding = invites.map((invitee, idx) => (
-      <tr className='dark-row' key= { idx }>
-        <td className='title'>{ invitee }</td>
-        <td className='table-right-buttons'>
-          <button
-            className='table-button'
-            onClick={ () => this.remove(invitee) }>
-            uninvite
-          </button>
-        </td>
-      </tr>
-    ));
-    return (
-      <div className='invite-form'>
-        { error ? <div className='form-error'>{ error }</div> : null }
-        <div className='form-element'>
-          <label>invite</label>
-          <input
-            onChange={ this.updateInvitee }
-            type='text'
-            value={ this.state.invitee }
-          />
-        </div>
-        <div className='form-submit'>
-          <button onClick={ this.submit }>create</button>
-        </div>
-        { (loading) ? (<h1>loading...</h1>) : (
+    const { league, invitesLoading } = this.props;
+    if(league && league.isCreator){
+
+      let content;
+      //not loading
+      if(league.invites && !invitesLoading){
+        const outstanding = league.invites.map((invitee, idx) => (
+          <tr className='dark-row' key= { idx }>
+            <td className='title'>{ invitee }</td>
+            <td className='table-right-buttons'>
+              <button
+                className='table-button'
+                onClick={ () => this.uninvite(invitee) }>
+                uninvite
+              </button>
+            </td>
+          </tr>
+        ));
+        content = (
           <table className='full-list mt10'>
             <tbody className='full-list-body'>
               { outstanding }
             </tbody>
           </table>
-          ) }
-      </div>
-    );
+        );
+      } else {
+        content = (<h1>loading...</h1>);
+      }
+
+      return(
+        <Expandable
+          toggleFn={ this.toggleFn('inviteExp') }
+          expanded={ this.state.inviteExp }
+          label='Invites'
+        >
+          <div className='invite-form'>
+            <div className='form-element'>
+              <label>invite</label>
+              <input
+                onChange={ this.updateInvitee }
+                type='text'
+                value={ this.state.invitee }
+              />
+            </div>
+            <div className='form-submit'>
+              <button onClick={ this.submit }>invite</button>
+            </div>
+            { content }
+          </div>
+        </Expandable>
+      );      
+    }
+    return null;
   }
 
   renderMembers(){
-    const { creator } = this.props.league;
-    const { username } = this.props;
-    const members = this.props.league.members.map((m, idx) => (
-      <tr key={ idx } className='dark-row'>
-        <td className='title'>{ m }</td>
-        { (creator !== m && creator === username) && 
-        <td className='table-right-buttons'>
-          <button
-            className='table-button'
-            onClick={ () => this.remove(m) }>
-            remove
-          </button>
-        </td>
-        }
-      </tr>
-    ));
-    return (
-      <table className='full-list'>
-        <tbody className='full-list-body'>
-          { members }
-        </tbody>
-      </table>
-    );
-  }
+    const { league, username, membersLoading } = this.props;
+    if(league){
 
-  render(){
-    console.log(this.props.error);
-    const { loading, error, league, username } = this.props;
-    const isCreator = ( league.creator === username);
+      let content;
+      if(league.members && !membersLoading){
 
-    if(loading || isEmpty(league))
-      return (<h1>loading...</h1>);
+        const members = league.members.map((m, idx) => (
+          <tr key={ idx } className='dark-row'>
+            <td className='title'>{ m }</td>
+            { (username !== m && league.isCreator) && 
+            <td className='table-right-buttons'>
+              <button
+                className='table-button'
+                onClick={ () => this.kick(m) }>
+                kick
+              </button>
+            </td>
+            }
+          </tr>
+        ));
+        content = (
+          <table className='full-list'>
+            <tbody className='full-list-body'>
+              { members }
+            </tbody>
+          </table>
+        );
 
-    if(error)
-      return (<h1>{ error }</h1>);
+      } else {
+        content = (<h1>loading...</h1>);
+      }
 
-    return (
-      <div className='league-view-container'>
-        <h2>{ league.name }</h2>
-        { isCreator &&
-          /* only display invites widget if the person is the league creator */
-          <Expandable
-            toggleFn={ this.toggleFn('inviteExp') }
-            expanded={ this.state.inviteExp }
-            label='League Invites'
-          >
-            { this.renderInvites() }
-          </Expandable>
-        }
+      return(
         <Expandable
           toggleFn={ this.toggleFn('membersExp') }
           expanded={ this.state.membersExp }
           label='League Members'
         >
-          { this.renderMembers() }
+          { content }
         </Expandable>
+      );
+    }
+    return null;
 
+  }
+
+  renderContent(){
+    const { league } = this.props;
+    if(league)
+      return (
         <Expandable
           toggleFn={ this.toggleFn('contentExp') }
           expanded={ this.state.contentExp }
@@ -179,6 +209,21 @@ class LeagueView extends React.Component{
         >
           <h1>content</h1>
         </Expandable>
+      );
+    else
+      return null; 
+  }
+
+  render(){
+    const { league, error } = this.props;
+    const loading = (!league);
+    return (
+      <div className='league-view-container'>
+        { this.renderTitle() }
+        { this.renderError() }
+        { this.renderInvites() }
+        { this.renderMembers() }
+        { this.renderContent() }
       </div>
     );
   }

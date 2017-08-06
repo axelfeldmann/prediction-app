@@ -91,7 +91,8 @@ LeagueRouter.get('/:leagueID', (req, res) => {
         _id: league._id,
         name: league.name,
         creator: league.creator.username,
-        members: members
+        members: members,
+        isCreator: (league.creator.username === req.user.username)
       };
 
       if(league.creator.username === req.user.username){
@@ -107,6 +108,9 @@ LeagueRouter.get('/:leagueID', (req, res) => {
 
 LeagueRouter.get('/invites/:username', (req, res) => {
   const username = req.params.username;
+
+  if(username !== req.user.username)
+    return res.status(401).send('you cannot get invites for this user');
 
   User
     .findOne({ username })

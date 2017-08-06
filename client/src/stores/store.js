@@ -29,6 +29,7 @@ const invitesReducer = (state = defaultInvites, action) => {
     case 'INVITES_ERROR':
       copy = Object.assign({}, state);
       copy.loading = false;
+      copy.error = action.error;
       return copy;
     case 'GOT_INVITES':
       copy = Object.assign({}, state);
@@ -44,51 +45,65 @@ const invitesReducer = (state = defaultInvites, action) => {
 ////////////////////////////////////////////////////////////////////////////////
 
 const defaultLeague = {
-  league: {},
+  league: null,
   error: '',
-  loading: false,
-  inviteesLoading: false
+  membersLoading: false,
+  invitesLoading: false,
+  loading: false
 };
 
 const leagueReducer = (state = defaultLeague, action) => {
-  let copy;
+  let league, copy;
   switch(action.type){
     case 'LOADING_LEAGUE':
-      copy = Object.assign({}, state);
-      copy.league = {};
-      copy.error = '';
+      copy = Object.assign({}, defaultLeague);
       copy.loading = true;
       return copy;
-    case 'LEAGUE_FAILED':
+    case 'LOADING_INVITEES':
       copy = Object.assign({}, state);
-      copy.league = {};
-      copy.error = action.error;
-      copy.loading = false;
+      copy.invitesLoading = true;
+      copy.error = '';
+      return copy;
+    case 'LOADING_MEMBERS':
+      copy = Object.assign({}, state);
+      copy.membersLoading = true;
+      copy.error = '';
+      return copy;
+    case 'GOT_INVITEES':
+      copy = Object.assign({}, state);
+      league = Object.assign({}, state.league);
+      copy.league = league;
+      copy.league.invites = action.invitees;
+      copy.invitesLoading = false;
+      copy.error = '';
+      return copy;
+    case 'GOT_MEMBERS':
+      copy = Object.assign({}, state);
+      league = Object.assign({}, state.league);
+      copy.league = league;
+      copy.league.members = action.members;
+      copy.membersLoading = false;
+      copy.error = '';
       return copy;
     case 'GOT_LEAGUE':
-      copy = Object.assign({}, state);
-      copy.league = action.league;
-      copy.error = '';
-      copy.loading = false;
-      return copy;
-    case 'NEW_INVITES':
-      copy = Object.assign({}, state);
-      const leagueCopy = Object.assign({}, copy.league);
-      leagueCopy.invites = action.invites;
-      copy.league = leagueCopy;
-      copy.inviteesLoading = false;
-      return copy;
-    case 'INVITEES_LOADING':
-      copy = Object.assign({}, state);
-      copy.inviteesLoading = true;
-      return copy;
-    case 'INVITEES_FAILED':
-      copy = Object.assign({}, state);
-      copy.inviteesLoading = false;
-      return copy;
+      return { 
+        error: '',
+        league: Object.assign({}, action.league),
+        membersLoading: false,
+        invitesLoading: false,
+        loading: false
+      };
+    case 'GOT_LEAGUE_ERROR':
+      return {
+        league: state.league,
+        error: action.error,
+        membersLoading: false,
+        invitesLoading: false,
+        loading: false
+      };
     default:
       return state;
-  }
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +121,6 @@ const leagueListReducer = (state = defaultLeagueList, action) => {
       return copy;
     case 'LEAGUE_LIST_FAILED':
       copy = Object.assign({}, state);
-      copy.leagues = [];
       copy.error = action.error;
       copy.loading = false;
       return copy;

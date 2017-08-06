@@ -14,8 +14,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getLeagueList: (token) => dispatch(Actions.getLeagueList(token)),
   pushID: (id) => () => dispatch(push(`/leagues/${id}`)),
-  remove: (token, leagueID, target, successCb) =>
-    dispatch(Actions.remove(token, leagueID, target, successCb))
+  leave: (token, leagueID, target) =>
+    dispatch(Actions.leave(token, leagueID, target)),
+  setError: (error) => dispatch(Actions.leagueListFailed(error))
 });
 
 class LeagueList extends React.Component{
@@ -27,21 +28,23 @@ class LeagueList extends React.Component{
 
   componentDidMount(){
     this.props.getLeagueList(this.props.token);
-  }
+  } 
 
   renderErrors(){
     let error;
-    if(this.props.leagues)
+    if(!this.props.leagues)
       error = 'no leagues found';
     if(this.props.error)
       error = this.props.error;
 
-    return (<div className='form-error'>{ error }</div>);
+    if(error)
+      return (<div className='form-error'>{ error }</div>);
+    return null;
   }
 
   leave(leagueID){
-    const { remove, token, username, getLeagueList } = this.props;
-    remove(token, leagueID, username, () => getLeagueList(token));
+    const { leave, token, username } = this.props;
+    leave(token, leagueID, username);
   }
 
   renderLeagues(){
@@ -93,7 +96,7 @@ class LeagueList extends React.Component{
 
     if(memberLeagues.length > 0)
       leagueLists.push(
-        <div className='league-list'>
+        <div className='league-list' key={ 1 }>
           <label className='list-label'>Leagues (member)</label>
           <table className='full-list'>
             <tbody className='full-list-body'>

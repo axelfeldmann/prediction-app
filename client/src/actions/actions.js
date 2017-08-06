@@ -175,15 +175,73 @@ const loadingLeague = () => ({
   type: 'LOADING_LEAGUE'
 });
 
-const leagueFailed = (error) => ({
-  type: 'LEAGUE_FAILED',
-  error
+const loadingInvitees = () => ({
+  type: 'LOADING_INVITEES'
+});
+
+const loadingMembers = () => ({
+  type: 'LOADING_MEMBERS'
+});
+
+const gotInvitees = (invitees) => ({
+  type: 'GOT_INVITEES',
+  invitees
+});
+
+const gotMembers = (members) => ({
+  type: 'GOT_MEMBERS',
+  members
 });
 
 const gotLeague = (league) => ({
   type: 'GOT_LEAGUE',
   league
 });
+
+const gotLeagueError = (error) => ({
+  type: 'GOT_LEAGUE_ERROR',
+  error
+});
+
+const getMembers = (token, leagueID) => (dispatch) => {
+  dispatch(loadingMembers());
+  fetch(`/leagues/${leagueID}`, {
+    method: 'GET',
+    headers: getHeaders(token)
+  })
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object')
+        dispatch(gotMembers(parsed.league.members));
+      else
+        dispatch(gotLeagueError(parsed));
+    })
+};
+
+const getLeagueInvites = (token, leagueID) => (dispatch) => {
+  dispatch(loadingInvitees());
+  fetch(`/leagues/${leagueID}`, {
+    method: 'GET',
+    headers: getHeaders(token)
+  })
+    .then(resp => {
+      if(resp.ok)
+        return resp.json();
+      else
+        return resp.text();
+    })
+    .then(parsed => {
+      if(typeof parsed === 'object')
+        dispatch(gotInvitees(parsed.league.invites));
+      else
+        dispatch(gotLeagueError(parsed));
+    })
+};
 
 const getLeague = (token, leagueID) => (dispatch) => {
   dispatch(loadingLeague());
@@ -201,30 +259,12 @@ const getLeague = (token, leagueID) => (dispatch) => {
       if(typeof parsed === 'object')
         dispatch(gotLeague(parsed.league));
       else
-        dispatch(leagueFailed(parsed));
+        dispatch(gotLeagueError(parsed));
     });
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// invite actions
-////////////////////////////////////////////////////////////////////////////////
-
-const newInvites = (invites) => ({
-  type: 'NEW_INVITES',
-  invites
-});
-
-const inviteesLoading = () => ({
-  type: 'INVITEES_LOADING'
-});
-
-const inviteesFailed = (error) => ({
-  type: 'INVITEES_FAILED',
-  error
-});
-
 const sendInvite = (token, leagueID, invitee, errorCb) => (dispatch) => {
-  dispatch(inviteesLoading());
+  dispatch(loadingInvitees());
   fetch(`/leagues/invite`, {
     method: 'POST',
     body: JSON.stringify({ leagueID, invitee }),
@@ -238,11 +278,15 @@ const sendInvite = (token, leagueID, invitee, errorCb) => (dispatch) => {
     })
     .then(parsed => {
       if(typeof parsed === 'object')
-        dispatch(newInvites(parsed.invites));
+        dispatch(gotInvitees(parsed.invites));
       else
-        dispatch(inviteesFailed(parsed));
+        dispatch(gotLeagueError(parsed));
     });
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// invites page actions
+////////////////////////////////////////////////////////////////////////////////
 
 const loadingInvites = () => ({
   type: 'LOADING_INVITES'
@@ -277,10 +321,6 @@ const getInvites = (token, username) => (dispatch) => {
         dispatch(failedInvites(parsed));
     });
 };
-
-////////////////////////////////////////////////////////////////////////////////
-// accept/reject actions
-////////////////////////////////////////////////////////////////////////////////
 
 const invitesError = (error) => ({
   type: 'INVITES_ERROR',
@@ -333,7 +373,7 @@ const reject = (token, leagueID, errorCb) => (dispatch, getState) => {
 // remove action
 ////////////////////////////////////////////////////////////////////////////////
 
-const remove = (token, leagueID, target, successCb) => (dispatch) => {
+const remove = (token, leagueID, target, successCb, errorCb) => (dispatch) => {
   fetch('/leagues/remove', {
     method: 'POST',
     body: JSON.stringify({ leagueID, target }),
@@ -347,10 +387,31 @@ const remove = (token, leagueID, target, successCb) => (dispatch) => {
     })
     .then(parsed => {
       if(typeof parsed === 'object')
-        successCb(parsed.message);
-      else //TODO BETTER ERROR HANDLING
-        console.log(parsed)
+        successCb(parsed);
+      else
+        errorCb(parsed);
     });
+};
+
+const kick = (token, leagueID, target) => (dispatch) => {
+  dispatch(loadingMembers());
+  dispatch(remove(token, leagueID, target,
+    () => dispatch(getMembers(token, leagueID)),
+    (error) => dispatch(gotLeagueError(error))));
+};
+
+const uninvite = (token, leagueID, target) => (dispatch) => {
+  dispatch(loadingInvitees());
+  dispatch(remove(token, leagueID, target,
+    () => dispatch(getLeagueInvites(token, leagueID)),
+    (error) => dispatch(gotLeagueError(error))));
+};
+
+const leave = (token, leagueID, username) => (dispatch) => {
+  dispatch(loadingLeagueList());
+  dispatch(remove(token, leagueID, username,
+    () => dispatch(getLeagueList(token)),
+    (error) => dispatch(leagueListFailed(error))));
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -369,7 +430,15 @@ const Actions = {
   getInvites,
   accept,
   reject,
-  remove
+  remove,
+  gotLeagueError,
+  gotMembers,
+  leagueListFailed,
+  getMembers,
+  getLeagueInvites,
+  uninvite,
+  kick,
+  leave
 };
 
 export default Actions;
