@@ -1,5 +1,17 @@
+.league-title{
+  margin: 0px;
+  padding-left: 5px;
+}
+
 .league-view-container{
   -webkit-flex: 1;
   display: flex;
   flex-flow: column;
+}
+
+.league-content{
+  margin: 5px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  padding-top: 5px;
 }

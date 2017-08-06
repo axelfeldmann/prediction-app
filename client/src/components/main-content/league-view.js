@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Actions from '../../actions/actions';
 import Expandable from '../general/expandable';
-import isEmpty from 'lodash/isEmpty'
 
 const mapStateToProps = (state) => ({
   token: state.auth.token,
@@ -31,7 +30,6 @@ class LeagueView extends React.Component{
     this.state = {
       membersExp: false,
       inviteExp: false,
-      contentExp: false,
       invitee: ''
     };
 
@@ -72,7 +70,7 @@ class LeagueView extends React.Component{
   }
 
   submit(){
-    const { token, league, sendInvite, setError } = this.props;
+    const { token, league, sendInvite } = this.props;
     const { invitee } = this.state;
     this.setState({ invitee: '' });
     sendInvite(token, league._id, invitee, this.errorCb);
@@ -89,9 +87,9 @@ class LeagueView extends React.Component{
   renderTitle(){
     const { league, loading } = this.props;
     if(league)
-      return (<h2>{ league.name }</h2>);
+      return (<h2 className='league-title'>{ league.name }</h2>);
     else if(loading)
-      return (<h2>loading...</h2>);
+      return (<h2 className='league-title'>loading...</h2>);
     return null;
   }
 
@@ -101,7 +99,7 @@ class LeagueView extends React.Component{
 
       let content;
       //not loading
-      if(league.invites && !invitesLoading){
+      if(!invitesLoading && league.invites.length){
         const outstanding = league.invites.map((invitee, idx) => (
           <tr className='dark-row' key= { idx }>
             <td className='title'>{ invitee }</td>
@@ -121,6 +119,8 @@ class LeagueView extends React.Component{
             </tbody>
           </table>
         );
+      } else if(!invitesLoading) {
+        content = null;
       } else {
         content = (<h1>loading...</h1>);
       }
@@ -202,21 +202,15 @@ class LeagueView extends React.Component{
     const { league } = this.props;
     if(league)
       return (
-        <Expandable
-          toggleFn={ this.toggleFn('contentExp') }
-          expanded={ this.state.contentExp }
-          label='League Content'
-        >
-          <h1>content</h1>
-        </Expandable>
+        <div className='league-content'>
+          content
+        </div>
       );
     else
       return null; 
   }
 
   render(){
-    const { league, error } = this.props;
-    const loading = (!league);
     return (
       <div className='league-view-container'>
         { this.renderTitle() }
